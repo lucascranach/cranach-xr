@@ -8,7 +8,10 @@ export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd())
 
   return {
-    plugins: [react()],
+    plugins: [react(), basicSsl],
+    server: {
+      port: 5174,
+    },
     // You can access the environment variables using `env`
     define: {
       "process.env": env,

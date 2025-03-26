@@ -1,11 +1,29 @@
 import { useEffect, useRef, useState } from "react"
 import { useAtom } from "jotai"
+
 import Scene from "./components/Scene"
+
+import { artworksAtom } from "./store/atom"
 import { fetchData } from "./utils/fetchData"
-import { dataAtom } from "./store/atom"
+
+function filterBestOfArtworks(artworks) {
+  if (!Array.isArray(artworks)) {
+    console.error("Expected an array of artworks")
+    return []
+  }
+
+  return artworks.filter((artwork) => artwork.isBestOf === true)
+}
 
 function App() {
-  const [results, setResults] = useAtom(dataAtom)
+  const [artworksData, setArtWorksData] = useAtom(artworksAtom)
+
+  // https://lucascranach.org/data-proxy/image.php
+  // ?subpath=
+  // /DE_KSVC_M165_FR338C
+  // /01_Overall
+  // /DE_KSVC_M165_FR338C
+  // _2010-09_Overall-m.jpg
 
   useEffect(() => {
     ;(async () => {
@@ -14,15 +32,13 @@ function App() {
         import.meta.env.VITE_API_LOGIN,
         import.meta.env.VITE_API_PASSWORD
       )
-      setResults(data.data.results)
+      const bestOfArtworks = filterBestOfArtworks(data)
+      setArtWorksData(bestOfArtworks)
+      // console.log(bestOfArtworks)
     })()
   }, [])
 
-  return (
-    <>
-      <Scene />
-    </>
-  )
+  return <>{<Scene />}</>
 }
 
 export default App
