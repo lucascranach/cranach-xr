@@ -18,10 +18,10 @@ export const Experience = () => {
   const a4Height = 297 / 1000
   return (
     <>
-      <mesh position={[-0, 1, -0.4]}>
+      {/* <mesh position={[-0, 1, -0.4]}>
         <planeGeometry args={[a4Width, a4Height]} />
         <meshBasicMaterial color="white" side={THREE.DoubleSide} />
-      </mesh>
+      </mesh> */}
       <group ref={groupRef}>
         {artworksData &&
           artworksData.map((work, index) => {

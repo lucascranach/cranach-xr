@@ -1,7 +1,9 @@
 import React, { useMemo, useRef, useState } from "react"
-import { Image, Box, Html, Text3D, Text } from "@react-three/drei"
+import { Image, Box, Html, Text3D, Text, Line } from "@react-three/drei"
 import { useFrame } from "@react-three/fiber"
 import * as THREE from "three"
+
+import { SizeMeasurement } from "./SizeMeasurement"
 
 import { calculatePaintingDimensions } from "../utils/calculatePaintingDimensions"
 
@@ -69,8 +71,8 @@ const Painting = (props) => {
 
   console.log(props.data)
 
-  return (
-    <>
+  const PaintingInfo = () => {
+    return (
       <group>
         <group position={[0, 0.8, 0]} scale={0.1}>
           <Text
@@ -80,17 +82,32 @@ const Painting = (props) => {
         <group scale={0.04} position={[-0.75, 0.5, 0]}>
           <Text maxWidth={12}>{props.data.dimensions}</Text>
         </group>
-        <group onClick={handleClick} side={THREE.BackSide} ref={imageRef}>
-          <Image
-            scale={imageScale}
-            url={props.data.images.overall.images[0].sizes.medium.src}
-          />
-          {/* <Image
+      </group>
+    )
+  }
+
+  const PaintingImage = () => {
+    return (
+      <group onClick={handleClick} ef={imageRef}>
+        <Image
+          scale={imageScale}
+          url={props.data.images.overall.images[0].sizes.medium.src}
+        />
+        {/* <Image
             url={"/img/painting-01-back.jpg"}
             scale={[0.4, 0.5]}
             rotation-y={Math.PI}
           /> */}
-        </group>
+      </group>
+    )
+  }
+
+  return (
+    <>
+      <group>
+        <PaintingInfo />
+        <SizeMeasurement imageScale={imageScale} />
+        <PaintingImage />
       </group>
     </>
   )
