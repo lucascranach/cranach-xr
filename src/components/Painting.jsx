@@ -11,17 +11,6 @@ const Painting = (props) => {
   const imageRef = useRef()
   const [rotation, setRotation] = useState(0)
 
-  useFrame(() => {
-    if (Math.abs(imageRef.current.rotation.y - rotation) > 0.01) {
-      imageRef.current.rotation.y +=
-        (rotation - imageRef.current.rotation.y) * 0.1
-    }
-  })
-
-  function handleClick(event) {
-    setRotation(rotation + Math.PI)
-  }
-
   const imageScale = useMemo(() => {
     return calculateImageScale(props.data)
   }, [props.data])
@@ -43,18 +32,18 @@ const Painting = (props) => {
 
   const PaintingImage = () => {
     return (
-      <group onClick={handleClick} ref={imageRef}>
+      <group ref={imageRef}>
         <Image
           scale={imageScale}
           url={props.data.images.overall.images[0].sizes.medium.src}
         />
-        {/* {props.data.images.reverse && (
+        {props.data.images.reverse && (
           <Image
             url={props.data.images.reverse.images[0].sizes.medium.src}
             scale={imageScale}
             rotation-y={Math.PI}
           />
-        )} */}
+        )}
       </group>
     )
   }

@@ -70,7 +70,7 @@ export const SizeMeasurement = ({ imageScale }) => {
   const heightTextPosition = [imageScale[0] / 2 + fontSize + 0.05, 0, 0] // Position to the left of the vertical line// Position to the left of the vertical line
 
   return (
-    <group>
+    <group position={[0, 0, 0.025]}>
       <group name="width" position={[0, 0.05, 0]}>
         <Line
           points={horizontalLinePoints}
