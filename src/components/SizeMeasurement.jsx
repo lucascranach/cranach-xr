@@ -14,7 +14,7 @@ export const SizeMeasurement = ({ imageScale }) => {
     markerColor,
     dashed,
     fontSize,
-  } = useControls({
+  } = useControls("Measurement", {
     lineWidth: { value: 2, min: 1, max: 10, step: 1 },
     dashSize: { value: 1, min: 0.1, max: 5, step: 0.1 },
     dashScale: { value: 100, min: 10, max: 500, step: 10 },
@@ -88,7 +88,7 @@ export const SizeMeasurement = ({ imageScale }) => {
           anchorX="center"
           anchorY="bottom"
         >
-          Width
+          {imageScale[0].toFixed(2)} m
         </Text>
         <Line
           points={angledLinePointsHorizontalLeft}
@@ -121,7 +121,7 @@ export const SizeMeasurement = ({ imageScale }) => {
           anchorY="bottom"
           rotation={[0, 0, Math.PI / 2]}
         >
-          Height
+          {imageScale[1].toFixed(2)} m
         </Text>
         <Line
           points={angledLinePointsVerticalTop}

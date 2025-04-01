@@ -18,21 +18,18 @@ export const Experience = () => {
   const a4Height = 297 / 1000
   return (
     <>
-      {/* <mesh position={[-0, 1, -0.4]}>
-        <planeGeometry args={[a4Width, a4Height]} />
-        <meshBasicMaterial color="white" side={THREE.DoubleSide} />
-      </mesh> */}
       <group ref={groupRef}>
         {artworksData &&
           artworksData.map((work, index) => {
             // test for missing images
             // lucascranach.org/de/DE_BSTGS-GNMN-Lost_Gm209/
             // no images available for this artwork
+            // console.log(work)
             if (index === 45) return null
-            if (index > 3) return null
+            // if (index > 3) return null
 
             return (
-              <group key={work.id} position={[index * 2, 1, -0.5]}>
+              <group key={work.id + index} position={[index * 2, 1, -0.5]}>
                 <Painting data={work} index={index} />
               </group>
             )
