@@ -34,7 +34,6 @@ const Scene = () => {
           {/* <Stage /> */}
 
           <Grid position={[0, -0.01, 0]} />
-          {/* <Experience /> */}
 
           <Curve>
             <mesh>

@@ -12,12 +12,13 @@ import React, { useEffect, useMemo, useRef, useState } from "react"
 import * as THREE from "three"
 
 const Curve = ({ children }) => {
-  const { start, end, mid, position, progress } = useControls({
+  const { start, end, mid, position, progress, gap } = useControls({
     start: { x: 0, y: 0, z: 0 },
     end: { x: 16, y: 0, z: 10 },
     mid: { x: 5, y: 0, z: 5 },
     position: { x: 0, y: 0, z: 0 },
     progress: { value: 0, min: 0, max: 1, step: 0.01 },
+    gap: { value: 0.1, min: 0, max: 0.5, step: 0.01 },
   })
 
   const [curvePositions, setCurvePositions] = useState([])
@@ -35,14 +36,14 @@ const Curve = ({ children }) => {
   useEffect(() => {
     // Calculate curve positions for each child based on progress
     const newPositions = React.Children.map(children, (_, index) => {
-      const childProgress = progress + index * 0.1 // Adjust spacing as needed
+      const childProgress = progress + index * gap // Adjust spacing as needed
       const clampedProgress = Math.max(0, Math.min(1, childProgress)) // Ensure progress is within 0-1 range
       const newPosition = new THREE.Vector3()
       curve.getPoint(clampedProgress, newPosition)
       return newPosition
     })
     setCurvePositions(newPositions || [])
-  }, [progress, curve, children])
+  }, [progress, curve, children, gap])
 
   return (
     <>
