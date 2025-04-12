@@ -11,23 +11,41 @@ import { calculateImageScale } from "../utils/calculateImageScale"
 
 import { artworksAtom } from "../store/atom"
 
-export const Experience = () => {
+export const Experience = ({ progress, gap, start, end, mid, index }) => {
   const artworksData = useAtomValue(artworksAtom)
+
+  const curve = useMemo(() => {
+    return new THREE.QuadraticBezierCurve3(
+      new THREE.Vector3(start.x, start.y, start.z),
+      new THREE.Vector3(mid.x, mid.y, mid.z),
+      new THREE.Vector3(end.x, end.y, end.z)
+    )
+  }, [start, mid, end])
+
+  const curvePositions = useMemo(() => {
+    return artworksData?.map((_, i) => {
+      const childProgress = progress + i * gap
+      const clampedProgress = Math.max(0, Math.min(1, childProgress))
+      const newPosition = curve.getPoint(clampedProgress, new THREE.Vector3())
+      return newPosition
+    })
+  }, [progress, gap, artworksData, curve])
 
   return (
     <>
       {artworksData &&
-        artworksData.map((work, index) => {
-          // test for missing images
-          // lucascranach.org/de/DE_BSTGS-GNMN-Lost_Gm209/
-          // no images available for this artwork
-          // console.log(work)
-          if (index === 45) return null
-          if (index > 20) return null
+        artworksData.map((work, artworkIndex) => {
+          if (artworkIndex === 45) return null
+          if (artworkIndex > 10) return null
 
           return (
-            <group key={work.id + index}>
-              <Painting data={work} index={index} />
+            <group
+              key={work.id + artworkIndex}
+              position={
+                curvePositions ? curvePositions[artworkIndex] : [0, 0, 0]
+              }
+            >
+              <Painting data={work} index={artworkIndex} />
             </group>
           )
         })}
