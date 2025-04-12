@@ -38,18 +38,25 @@ const Curve = ({ children }) => {
     const newPositions = React.Children.map(children, (_, index) => {
       const childProgress = progress + index * gap // Adjust spacing as needed
       const clampedProgress = Math.max(0, Math.min(1, childProgress)) // Ensure progress is within 0-1 range
-      const newPosition = new THREE.Vector3()
-      curve.getPoint(clampedProgress, newPosition)
+      const newPosition = curve.getPoint(clampedProgress, new THREE.Vector3())
       return newPosition
     })
-    setCurvePositions(newPositions || [])
+
+    setCurvePositions(newPositions)
   }, [progress, curve, children, gap])
 
   return (
     <>
       <group position={[position.x, position.y, position.z]}>
         {React.Children.map(children, (child, index) => {
-          return React.cloneElement(child, { position: curvePositions[index] })
+          if (curvePositions[index]) {
+            return (
+              <group key={index} position={curvePositions[index]}>
+                {child}
+              </group>
+            )
+          }
+          return child
         })}
 
         <QuadraticBezierLine

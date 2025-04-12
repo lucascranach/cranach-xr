@@ -36,14 +36,7 @@ const Scene = () => {
           <Grid position={[0, -0.01, 0]} />
 
           <Curve>
-            <mesh>
-              <boxGeometry args={[0.2, 0.2, 0.2]} />
-              <meshStandardMaterial attach="material" color="red" />
-            </mesh>
-            <mesh>
-              <boxGeometry args={[0.3, 0.3, 0.3]} />
-              <meshStandardMaterial attach="material" color="blue" />
-            </mesh>
+            <Experience />
           </Curve>
         </XR>
       </Canvas>
