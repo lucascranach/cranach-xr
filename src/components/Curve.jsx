@@ -13,10 +13,10 @@ import * as THREE from "three"
 
 const Curve = ({ children }) => {
   const { start, end, mid, position, progress, gap } = useControls({
-    start: { x: 0, y: 0, z: 0 },
+    start: { x: 16.6, y: 0, z: 0 },
     end: { x: 16, y: 0, z: 10 },
     mid: { x: 5, y: 0, z: 5 },
-    position: { x: 0, y: 0, z: 0 },
+    position: { x: -12.5, y: 0.9, z: -4.68 },
     progress: { value: 0, min: 0, max: 1, step: 0.01 },
     gap: { value: 0.1, min: 0, max: 0.5, step: 0.01 },
   })
