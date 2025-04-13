@@ -25,15 +25,6 @@ const Scene = () => {
         <XR store={store}>
           <XROrigin />
           <OrbitControls />
-          {/* <MapControls rotation={[0, 0, 0]} enableRotate={false} minZoom={4} />
-          <OrthographicCamera
-            position={[0, 10, 0]}
-            rotation={[0, Math.Pi / -2, 0]}
-            zoom={40}
-            enabled={true}
-            makeDefault
-          /> */}
-          {/* <Stage /> */}
 
           <Grid position={[0, -0.01, 0]} />
 

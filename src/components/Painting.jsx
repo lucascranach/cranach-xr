@@ -50,9 +50,9 @@ const Painting = (props) => {
 
   return (
     <>
-      <group>
+      <group rotation={[0, Math.PI / 4, 0]}>
         {/* <PaintingInfo /> */}
-        <SizeMeasurement imageScale={imageScale} />
+        {/* <SizeMeasurement imageScale={imageScale} /> */}
         <PaintingImage />
       </group>
     </>

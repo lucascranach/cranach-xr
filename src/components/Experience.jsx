@@ -36,7 +36,7 @@ export const Experience = ({ progress, gap, start, end, mid, index }) => {
       {artworksData &&
         artworksData.map((work, artworkIndex) => {
           if (artworkIndex === 45) return null
-          if (artworkIndex > 10) return null
+          if (artworkIndex > 0) return null
 
           return (
             <group
