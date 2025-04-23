@@ -17,7 +17,7 @@ const Painting = (props) => {
 
   function handerClick(e) {
     console.log(props.data.inventoryNumber)
-    console.log(imageScale)
+    console.log(e)
   }
 
   const PaintingInfo = () => {
@@ -55,7 +55,10 @@ const Painting = (props) => {
 
   return (
     <>
-      <group rotation={[0, Math.PI / 4, 0]} onClick={handerClick}>
+      <group
+        // rotation={[0, Math.PI / 4, 0]}
+        onClick={handerClick}
+      >
         {/* <PaintingInfo /> */}
         {/* <SizeMeasurement imageScale={imageScale} /> */}
         <PaintingImage />

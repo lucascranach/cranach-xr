@@ -1,3 +1,4 @@
+import * as THREE from "three"
 import { useControls } from "leva"
 import {
   CurveModifier,
@@ -9,8 +10,6 @@ import {
 } from "@react-three/drei"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import React, { useEffect, useMemo, useRef, useState } from "react"
-
-import * as THREE from "three"
 
 const Curve = (props) => {
   const { position, gap, midZ, progress } = useControls({
@@ -73,19 +72,23 @@ const Curve = (props) => {
           dashed={false}
         />
 
-        {childrenArray.map((child, index) => (
-          <group
-            key={index}
-            position={[
-              animatedPositions[index].x,
-              animatedPositions[index].y,
-              animatedPositions[index].z,
-            ]}
-          >
-            <Text position={[0, 2, 0]}>{index}</Text>
-            {child}
-          </group>
-        ))}
+        {childrenArray.map((child, index) => {
+          const shouldRotate = animatedPositions[index].x < 0
+          return (
+            <group
+              key={index}
+              position={[
+                animatedPositions[index].x,
+                animatedPositions[index].y,
+                animatedPositions[index].z,
+              ]}
+              rotation={[0, shouldRotate ? Math.PI / 4 : 0, 0]}
+            >
+              {/* <Text position={[0, 2, 0]}>{index}</Text> */}
+              {child}
+            </group>
+          )
+        })}
       </group>
     </>
   )
