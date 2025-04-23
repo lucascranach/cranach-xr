@@ -14,6 +14,8 @@ import { artworksAtom } from "../store/atom"
 export const Experience = ({ progress, gap, start, end, mid, index }) => {
   const artworksData = useAtomValue(artworksAtom)
 
+  // console.log("artworksData", artworksData)
+
   const curve = useMemo(() => {
     return new THREE.QuadraticBezierCurve3(
       new THREE.Vector3(start.x, start.y, start.z),
@@ -36,7 +38,7 @@ export const Experience = ({ progress, gap, start, end, mid, index }) => {
       {artworksData &&
         artworksData.map((work, artworkIndex) => {
           if (artworkIndex === 45) return null
-          if (artworkIndex > 0) return null
+          // if (artworkIndex > 10) return null
 
           return (
             <group

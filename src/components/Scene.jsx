@@ -9,6 +9,7 @@ import {
   OrthographicCamera,
   Center,
   OrbitControls,
+  Box,
 } from "@react-three/drei"
 import { useControls, Leva } from "leva"
 import { Experience } from "./Experience"
@@ -28,6 +29,7 @@ const Scene = () => {
 
           <Grid position={[0, -0.01, 0]} />
 
+          {/* <Box></Box> */}
           <Curve>
             <Experience />
           </Curve>
