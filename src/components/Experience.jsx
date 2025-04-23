@@ -14,8 +14,6 @@ import { artworksAtom } from "../store/atom"
 export const Experience = ({ progress, gap, start, end, mid, index }) => {
   const artworksData = useAtomValue(artworksAtom)
 
-  // console.log("artworksData", artworksData)
-
   const curve = useMemo(() => {
     return new THREE.QuadraticBezierCurve3(
       new THREE.Vector3(start.x, start.y, start.z),
@@ -25,29 +23,38 @@ export const Experience = ({ progress, gap, start, end, mid, index }) => {
   }, [start, mid, end])
 
   const curvePositions = useMemo(() => {
-    return artworksData?.map((_, i) => {
-      const childProgress = progress + i * gap
-      const clampedProgress = Math.max(0, Math.min(1, childProgress))
-      const newPosition = curve.getPoint(clampedProgress, new THREE.Vector3())
+    const numberOfBoxes = artworksData.length // Total number of boxes
+    return Array.from({ length: numberOfBoxes }).map((_, i) => {
+      // Distribute boxes evenly from 0 to 1
+      let evenlyDistributedProgress = (i / (numberOfBoxes - 1) + progress) % 1
+
+      const newPosition = curve.getPoint(
+        evenlyDistributedProgress,
+        new THREE.Vector3()
+      )
       return newPosition
     })
-  }, [progress, gap, artworksData, curve])
+  }, [curve, progress, artworksData])
 
   return (
     <>
       {artworksData &&
+        // Array.from({ length: 100 }).map((_, artworkIndex) => {
+
         artworksData.map((work, artworkIndex) => {
-          if (artworkIndex === 45) return null
+          const position = curvePositions ? curvePositions[artworkIndex] : null
+          if (!position) return null // Skip rendering if position is null
           // if (artworkIndex > 10) return null
 
           return (
-            <group
-              key={work.id + artworkIndex}
-              position={
-                curvePositions ? curvePositions[artworkIndex] : [0, 0, 0]
-              }
-            >
-              <Painting data={work} index={artworkIndex} />
+            <group key={artworkIndex} position={position}>
+              {/* <Painting data={work} index={artworkIndex} /> */}
+              <Text position={[0, 2, 0]}>{artworkIndex}</Text>
+
+              <mesh>
+                <boxGeometry />
+                <meshBasicMaterial color="red" />
+              </mesh>
             </group>
           )
         })}

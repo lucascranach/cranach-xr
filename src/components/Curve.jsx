@@ -12,13 +12,14 @@ import React, { useEffect, useMemo, useRef, useState } from "react"
 import * as THREE from "three"
 
 const Curve = ({ children }) => {
-  const { width, position, progress, gap, midZ } = useControls({
-    width: { value: 100, min: 0, max: 100, step: 0.1 },
-    midZ: { value: 34, min: -100, max: 100, step: 0.1 },
-    position: { x: 0, y: 0, z: 15 },
+  const { position, progress, gap, midZ } = useControls({
+    midZ: { value: -0, min: -100, max: 100, step: 0.1 },
+    position: { x: 0, y: 0, z: 0 },
     progress: { value: 0, min: -1, max: 1, step: 0.01 },
-    gap: { value: 0.1, min: 0, max: 0.5, step: 0.01 },
+    gap: { value: 0.25, min: 0, max: 0.5, step: 0.01 },
   })
+
+  const width = gap * 500
 
   const start = { x: width, z: 1 }
   const mid = { x: 0, z: midZ }
@@ -30,7 +31,7 @@ const Curve = ({ children }) => {
         {React.Children.map(children, (child, index) => {
           return React.cloneElement(child, {
             index: index,
-            progress: progress,
+            progress: progress, // Pass the progress prop
             gap: gap,
             start: start,
             end: end,
@@ -38,14 +39,14 @@ const Curve = ({ children }) => {
           })
         })}
 
-        <QuadraticBezierLine
+        {/* <QuadraticBezierLine
           start={[start.x, 0, start.z]} // Starting point, can be an array or a vec3
           end={[end.x, 0, end.z]} // Ending point, can be an array or a vec3
           mid={[mid.x, 0, mid.z]} // Optional control point, can be an array or a vec3
-          color="red" // Default
+          color="blue" // Default
           lineWidth={1} // In pixels (default)
           dashed={false} // Default
-        />
+        /> */}
       </group>
     </>
   )
