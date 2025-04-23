@@ -28,10 +28,7 @@ const Scene = () => {
           <OrbitControls />
           <Stage />
           <Grid position={[0, -0.01, 0]} />
-
-          <Curve>
-            <Experience />
-          </Curve>
+          <Experience />
         </XR>
       </Canvas>
     </>
