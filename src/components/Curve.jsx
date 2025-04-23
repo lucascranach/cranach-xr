@@ -12,12 +12,37 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import React, { useEffect, useMemo, useRef, useState } from "react"
 
 const Curve = (props) => {
-  const { position, gap, midZ, progress } = useControls({
-    midZ: { value: -0, min: -100, max: 100, step: 0.1 },
-    position: { x: 0, y: 0, z: 0 },
+  const [playing, setPlaying] = useState(true)
+  const {
+    position,
+    gap,
+    midZ,
+    progress: progressControl,
+    toggleAnimation,
+  } = useControls({
+    midZ: { value: -3.5, min: -100, max: 100, step: 0.1 },
+    position: { x: 0, y: 0.8, z: 0 },
     gap: { value: 0.25, min: 0, max: 0.5, step: 0.01 },
     progress: { value: 0, min: 0, max: 1, step: 0.01 },
+    toggleAnimation: {
+      value: false,
+      onChange: (value) => {
+        setPlaying(value)
+      },
+    },
   })
+
+  const [progress, setProgress] = useState(progressControl)
+
+  useFrame((state, delta) => {
+    if (playing) {
+      setProgress((prevProgress) => (prevProgress + delta / 128) % 1) // Increased divisor to 16
+    }
+  })
+
+  useEffect(() => {
+    setProgress(progressControl)
+  }, [progressControl])
 
   const width = gap * 500
 
@@ -70,6 +95,7 @@ const Curve = (props) => {
           color="white"
           lineWidth={1}
           dashed={false}
+          visible={false}
         />
 
         {childrenArray.map((child, index) => {
@@ -82,7 +108,7 @@ const Curve = (props) => {
                 animatedPositions[index].y,
                 animatedPositions[index].z,
               ]}
-              rotation={[0, shouldRotate ? Math.PI / 4 : 0, 0]}
+              rotation={[0, shouldRotate ? Math.PI / 4 : -Math.PI / 4, 0]}
             >
               {/* <Text position={[0, 2, 0]}>{index}</Text> */}
               {child}
