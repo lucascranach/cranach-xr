@@ -14,6 +14,7 @@ export const Experience = () => {
 
   return (
     <>
+      {/* <Box args={[1, 1, 1]} position={[0, 0, 0]} /> */}
       {/* <Curve>
         {Array.from({ length: 100 }).map((_, index) => (
           <mesh key={index}>

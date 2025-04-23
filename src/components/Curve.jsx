@@ -19,11 +19,13 @@ const Curve = (props) => {
     midZ,
     progress: progressControl,
     toggleAnimation,
+    rotationThreshold, // Added new control
   } = useControls({
-    midZ: { value: -3.5, min: -100, max: 100, step: 0.1 },
-    position: { x: 0, y: 0.8, z: 0 },
-    gap: { value: 0.25, min: 0, max: 0.5, step: 0.01 },
-    progress: { value: 0, min: 0, max: 1, step: 0.01 },
+    midZ: { value: 0, min: -100, max: 100, step: 0.1 },
+    position: { x: 0, y: 0, z: 0 },
+    gap: { value: 0.2, min: 0, max: 0.5, step: 0.01 },
+    progress: { value: -1, min: 0, max: 1, step: 0.01 },
+    rotationThreshold: { value: 0.5, min: 0, max: 2, step: 0.01 }, // Leva control for threshold
     toggleAnimation: {
       value: false,
       onChange: (value) => {
@@ -33,12 +35,6 @@ const Curve = (props) => {
   })
 
   const [progress, setProgress] = useState(progressControl)
-
-  useFrame((state, delta) => {
-    if (playing) {
-      setProgress((prevProgress) => (prevProgress + delta / 128) % 1) // Increased divisor to 16
-    }
-  })
 
   useEffect(() => {
     setProgress(progressControl)
@@ -61,29 +57,60 @@ const Curve = (props) => {
   const childrenArray = React.Children.toArray(props.children)
   const numChildren = childrenArray.length
 
-  const positions = useMemo(() => {
-    const curveLength = curve.getLength()
-    const halfCurveLength = curveLength / 2 // Calculate half the curve length
-    const spacing = halfCurveLength / numChildren // Distribute children along half the curve
-
-    const positions = []
-    for (let i = 0; i < numChildren; i++) {
-      const distance = i * spacing
-      const point = curve.getPointAt(distance / curveLength) // Get point along the curve
-      positions.push(point)
-    }
-    return positions
-  }, [curve, numChildren])
+  const groupRefs = useRef([])
+  groupRefs.current = Array(numChildren)
+    .fill()
+    .map((_, i) => groupRefs.current[i] || React.createRef())
 
   const animatedPositions = useMemo(() => {
     const animatedPositions = []
     for (let i = 0; i < numChildren; i++) {
-      const distance = (i / numChildren / 2 + progress / 2) % 1 // Distribute children along half the curve
-      const point = curve.getPointAt(distance) // Get point along the curve
+      const normalizedPosition = numChildren > 1 ? i / (numChildren - 1) : 0.5
+      const adjustedProgress = progress
+      const distance = (normalizedPosition + adjustedProgress) / 2
+      const point = curve.getPointAt(Math.abs(distance % 1))
       animatedPositions.push(point)
     }
     return animatedPositions
   }, [curve, numChildren, progress])
+
+  useFrame((state, delta) => {
+    animatedPositions.forEach((pos, index) => {
+      const group = groupRefs.current[index]?.current
+      if (!group) return
+
+      group.position.set(pos.x, pos.y, pos.z)
+
+      const x = pos.x
+      let targetRotation = 0
+      // Invert the rotation angles
+      if (x > rotationThreshold) {
+        targetRotation = -Math.PI / 4 // Inverted: -45 degrees
+      } else if (x < -rotationThreshold) {
+        targetRotation = Math.PI / 4 // Inverted: 45 degrees
+      } else {
+        // Invert the interpolation range
+        targetRotation = THREE.MathUtils.mapLinear(
+          x,
+          -rotationThreshold,
+          rotationThreshold,
+          Math.PI / 4, // Inverted start angle
+          -Math.PI / 4 // Inverted end angle
+        )
+      }
+
+      group.rotation.y = THREE.MathUtils.damp(
+        group.rotation.y,
+        targetRotation,
+        8,
+        delta
+      )
+    })
+
+    if (playing) {
+      setProgress((prevProgress) => (prevProgress + delta / 256) % 1)
+    }
+  })
 
   return (
     <>
@@ -99,18 +126,8 @@ const Curve = (props) => {
         />
 
         {childrenArray.map((child, index) => {
-          const shouldRotate = animatedPositions[index].x < 0
           return (
-            <group
-              key={index}
-              position={[
-                animatedPositions[index].x,
-                animatedPositions[index].y,
-                animatedPositions[index].z,
-              ]}
-              rotation={[0, shouldRotate ? Math.PI / 4 : -Math.PI / 4, 0]}
-            >
-              {/* <Text position={[0, 2, 0]}>{index}</Text> */}
+            <group key={index} ref={groupRefs.current[index]}>
               {child}
             </group>
           )
