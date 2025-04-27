@@ -3,9 +3,7 @@ import { Image, Box, Html, Text3D, Text, Line } from "@react-three/drei"
 import { useFrame } from "@react-three/fiber"
 import * as THREE from "three"
 
-import { SizeMeasurement } from "./SizeMeasurement"
-
-import { calculateImageScale } from "../utils/calculateImageScale"
+import { calculateImageScale } from "../../utils/calculateImageScale"
 
 const Painting = (props) => {
   const imageRef = useRef()

@@ -8,40 +8,25 @@ import { Root, Container } from "@react-three/uikit"
 import { Flex, Box as Flexbox } from "@react-three/flex"
 
 import { artworksAtom } from "../store/atom"
-import Curve from "./Curve"
-import Painting from "./Painting"
+
 import PictureFrame from "./PictureFrame"
+import Modal from "./Modal"
+import DraggableCube from "./DraggableCube"
 
 import { calculateImageScale } from "../utils/calculateImageScale"
-
-const Layout = () => (
-  <Flex
-    mainAxis="y"
-    crossAxis="x"
-    flexDirection="row"
-    flexWrap="wrap"
-    justify="center"
-  >
-    <Flexbox>
-      <Box margin={100}></Box>
-    </Flexbox>
-    <Flexbox>
-      <Box margin={10}></Box>
-    </Flexbox>
-  </Flex>
-)
 
 export const Experience = () => {
   const artworksData = useAtomValue(artworksAtom)
 
   return (
     <>
-      <Plane args={[7, 2]} rotation={[Math.PI / -2, 0, 0]} position={[0, 0, 0]}>
-        <meshBasicMaterial color="#949494" />
-      </Plane>
-      <Box args={[7, 4, 0.2]} position={[0, 1, -1.1]}>
-        <meshBasicMaterial color="#949494" />
-      </Box>
+      <DraggableCube />
+      <group position={[-1, 1, -0.8]} scale={0.5}>
+        <Root>
+          0
+          <Modal data={artworksData[0]} />
+        </Root>
+      </group>
       <group
         position={[-calculateImageScale(artworksData[0])[0] - 0.2, 1.8, -0.9]}
       >
@@ -58,22 +43,6 @@ export const Experience = () => {
           )}
         </Flex>
       </group>
-
-      {/* <Curve>
-          {Array.from({ length: 100 }).map((_, index) => (
-            <mesh key={index}>
-              <boxGeometry />
-              <meshBasicMaterial color="red" />
-            </mesh>
-          ))}
-        </Curve> */}
-
-      {/* <Curve>
-          {artworksData.map(
-            (data, index) =>
-              index < 10 && <Painting key={index} data={data} index={index} />
-          )}
-        </Curve> */}
     </>
   )
 }

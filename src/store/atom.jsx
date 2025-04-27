@@ -5,3 +5,5 @@ export const artworksAtom = atom(async () => {
   const data = await res.json()
   return data
 })
+
+export const currentModalAtom = atom({})

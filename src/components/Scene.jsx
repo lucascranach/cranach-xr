@@ -10,10 +10,10 @@ import {
   Center,
   OrbitControls,
   Box,
+  Plane,
 } from "@react-three/drei"
 import { useControls, Leva } from "leva"
 import { Experience } from "./Experience"
-import Curve from "./Curve"
 
 const store = createXRStore()
 
@@ -29,6 +29,16 @@ const Scene = () => {
           <OrbitControls />
           <Grid position={[0, 0.01, 0]} />
           <Experience />
+          <Plane
+            args={[7, 2]}
+            rotation={[Math.PI / -2, 0, 0]}
+            position={[0, 0, 0]}
+          >
+            <meshBasicMaterial color="#949494" />
+          </Plane>
+          <Box args={[7, 4, 0.2]} position={[0, 1, -1.1]}>
+            <meshBasicMaterial color="#949494" />
+          </Box>
         </XR>
       </Canvas>
     </>
