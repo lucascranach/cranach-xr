@@ -25,9 +25,9 @@ const Scene = () => {
       <Canvas>
         <XR store={store}>
           <XROrigin />
+          {/* <Stage /> */}
           <OrbitControls />
-          <Stage />
-          <Grid position={[0, -0.01, 0]} />
+          <Grid position={[0, 0.01, 0]} />
           <Experience />
         </XR>
       </Canvas>

@@ -20,12 +20,14 @@ const Curve = (props) => {
     progress: progressControl,
     toggleAnimation,
     rotationThreshold, // Added new control
+    enableRotation, // Added new control for enabling rotation
   } = useControls({
     midZ: { value: 0, min: -100, max: 100, step: 0.1 },
     position: { x: 0, y: 0, z: 0 },
-    gap: { value: 0.2, min: 0, max: 0.5, step: 0.01 },
+    gap: { value: 0.5, min: 0, max: 0.5, step: 0.01 },
     progress: { value: -1, min: 0, max: 1, step: 0.01 },
     rotationThreshold: { value: 0.5, min: 0, max: 2, step: 0.01 }, // Leva control for threshold
+    enableRotation: { value: true }, // Leva control to toggle rotation
     toggleAnimation: {
       value: false,
       onChange: (value) => {
@@ -81,24 +83,28 @@ const Curve = (props) => {
 
       group.position.set(pos.x, pos.y, pos.z)
 
-      const x = pos.x
       let targetRotation = 0
-      // Invert the rotation angles
-      if (x > rotationThreshold) {
-        targetRotation = -Math.PI / 4 // Inverted: -45 degrees
-      } else if (x < -rotationThreshold) {
-        targetRotation = Math.PI / 4 // Inverted: 45 degrees
-      } else {
-        // Invert the interpolation range
-        targetRotation = THREE.MathUtils.mapLinear(
-          x,
-          -rotationThreshold,
-          rotationThreshold,
-          Math.PI / 4, // Inverted start angle
-          -Math.PI / 4 // Inverted end angle
-        )
+      if (enableRotation) {
+        // Check if rotation is enabled
+        const x = pos.x
+        // Invert the rotation angles
+        if (x > rotationThreshold) {
+          targetRotation = -Math.PI / 4 // Inverted: -45 degrees
+        } else if (x < -rotationThreshold) {
+          targetRotation = Math.PI / 4 // Inverted: 45 degrees
+        } else {
+          // Invert the interpolation range
+          targetRotation = THREE.MathUtils.mapLinear(
+            x,
+            -rotationThreshold,
+            rotationThreshold,
+            Math.PI / 4, // Inverted start angle
+            -Math.PI / 4 // Inverted end angle
+          )
+        }
       }
 
+      // Always damp towards the target rotation (which is 0 if enableRotation is false)
       group.rotation.y = THREE.MathUtils.damp(
         group.rotation.y,
         targetRotation,

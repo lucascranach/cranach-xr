@@ -17,6 +17,7 @@ const Painting = (props) => {
 
   function handerClick(e) {
     console.log(props.data.inventoryNumber)
+    console.log(imageScale)
     console.log(e)
   }
 
