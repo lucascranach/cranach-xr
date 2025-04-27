@@ -6,14 +6,14 @@ const Modal = ({ headline, data, ...props }) => {
   return (
     <>
       <Card
-        borderRadius={32}
-        padding={32}
-        gap={8}
+        borderRadius={1}
+        padding={4}
+        gap={1}
         flexDirection="column"
-        width={200}
+        width={50}
       >
-        <Text fontSize={16}>{data.metadata.title}</Text>
-        <Text fontSize={10} opacity={0.7}>
+        <Text fontSize={3.2}>{data.metadata.title}</Text>
+        <Text fontSize={2} opacity={0.9}>
           {data.description}
         </Text>
       </Card>

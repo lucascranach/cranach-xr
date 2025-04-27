@@ -15,7 +15,10 @@ import {
 import { useControls, Leva } from "leva"
 import { Experience } from "./Experience"
 
-const store = createXRStore()
+const store = createXRStore({
+  controller: { left: false },
+  hand: { left: false, right: false },
+})
 
 const Scene = () => {
   return (

@@ -12,6 +12,7 @@ import { artworksAtom } from "../store/atom"
 import PictureFrame from "./PictureFrame"
 import Modal from "./Modal"
 import DraggableCube from "./DraggableCube"
+import Draggable from "./Draggable"
 
 import { calculateImageScale } from "../utils/calculateImageScale"
 
@@ -20,15 +21,23 @@ export const Experience = () => {
 
   return (
     <>
-      <DraggableCube />
-      <group position={[-1, 1, -0.8]} scale={0.5}>
-        <Root>
-          0
-          <Modal data={artworksData[0]} />
-        </Root>
-      </group>
+      <Draggable>
+        <mesh>
+          <boxGeometry args={[0.2, 0.2, 0.2]} />
+          <meshStandardMaterial color="blue" />
+        </mesh>
+      </Draggable>
+
+      <Draggable>
+        <group position={[-0.6, 1.3, -0.5]}>
+          <Root>
+            <Modal data={artworksData[0]} />
+          </Root>
+        </group>
+      </Draggable>
+
       <group
-        position={[-calculateImageScale(artworksData[0])[0] - 0.2, 1.8, -0.9]}
+        position={[-calculateImageScale(artworksData[1])[0] - 0.2, 1.8, -0.9]}
       >
         <Flex flexDirection="row" padding={0} margin={0} alignItems={"center"}>
           {artworksData.map(
