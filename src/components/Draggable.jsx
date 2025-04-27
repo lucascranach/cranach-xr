@@ -1,13 +1,25 @@
-// filepath: /Users/calvinhnzr/Documents/Work/cranach/cranach-xr/src/components/Draggable.jsx
-import React, { useRef } from "react"
-import { useThree } from "@react-three/fiber"
+import React, { useRef, cloneElement } from "react"
+import { useThree, useFrame } from "@react-three/fiber"
 import * as THREE from "three"
 
 function Draggable({ children }) {
   const isDraggingRef = useRef(false)
   const groupRef = useRef(null)
+  const childRef = useRef(null)
   const offsetRef = useRef(new THREE.Vector3())
-  const { camera, scene } = useThree()
+  const { camera } = useThree()
+
+  // Make the child always face the camera
+  useFrame(() => {
+    if (isDraggingRef.current && childRef.current && camera) {
+      childRef.current.lookAt(camera.position)
+    }
+  })
+
+  // Clone the child to attach the ref
+  const childWithRef = React.isValidElement(children)
+    ? cloneElement(children, { ref: childRef })
+    : children
 
   return (
     <group
@@ -54,7 +66,7 @@ function Draggable({ children }) {
         }
       }}
     >
-      {children}
+      {childWithRef}
     </group>
   )
 }
