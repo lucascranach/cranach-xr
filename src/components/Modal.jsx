@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { Root, Container, Text } from "@react-three/uikit"
 import { Card } from "@react-three/uikit-apfel"
 
-const Modal = ({ headline, data, ...props }) => {
+const Modal = ({ data, ...props }) => {
   return (
     <>
       <Card

@@ -41,35 +41,41 @@ export const Experience = (props) => {
         </Curve>
       </Flex> */}
 
-      <Draggable playerRef={props.originRef}>
-        <mesh>
-          <boxGeometry args={[0.2, 0.2, 0.2]} />
-          <meshStandardMaterial color="blue" />
-        </mesh>
-      </Draggable>
-
-      <Draggable playerRef={props.originRef}>
+      {/* <Draggable playerRef={props.originRef}>
         <group position={[-0.6, 1.3, -0.5]}>
           <Root>
             <Modal data={artworksData[0]} />
           </Root>
         </group>
-      </Draggable>
+      </Draggable> */}
 
       <group
         position={[-calculateImageScale(artworksData[1])[0] - 0.2, 1.8, -0.9]}
       >
-        <Flex flexDirection="row" padding={0} margin={0} alignItems={"center"}>
+        <Flex
+          flexDirection="row"
+          padding={0}
+          margin={0}
+          // alignItems={"flex-end"}
+          alignItems={"center"}
+        >
           {artworksData.map(
             (data, index) =>
               index < 10 && (
-                <Flexbox margin={1} centerAnchor={true} key={data.id}>
-                  <Draggable playerRef={props.originRef}>
-                    <group key={index} position={[0, 0, 0]}>
-                      <PictureFrame key={index} data={data} index={index} />
-                    </group>
-                  </Draggable>
-                </Flexbox>
+                <group key={data.id}>
+                  <Flexbox margin={0.2} centerAnchor={true} key={data.id}>
+                    <Draggable playerRef={props.originRef}>
+                      <group key={index} position={[0, 0, 0]}>
+                        <PictureFrame key={index} data={data} index={index} />
+                      </group>
+                    </Draggable>
+                  </Flexbox>
+                  <Flexbox marginRight={1} centerAnchor={true}>
+                    <Root>
+                      <Modal data={data} />
+                    </Root>
+                  </Flexbox>
+                </group>
               )
           )}
         </Flex>
