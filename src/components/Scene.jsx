@@ -45,16 +45,18 @@ const Scene = () => {
           <OrbitControls />
           <Grid position={[0, 0.01, 0]} />
           <Experience originRef={originRef} />
-          <Plane
-            args={[7, 2]}
-            rotation={[Math.PI / -2, 0, 0]}
-            position={[0, 0, 0]}
-          >
-            <meshBasicMaterial color="#949494" />
-          </Plane>
-          <Box args={[7, 4, 0.2]} position={[0, 1, -1.1]}>
-            <meshBasicMaterial color="#949494" />
-          </Box>
+          <group position={[2.6, 0, 0]}>
+            <Plane
+              args={[7, 2]}
+              rotation={[Math.PI / -2, 0, 0]}
+              position={[0, 0, 0]}
+            >
+              <meshBasicMaterial color="#949494" />
+            </Plane>
+            {/* <Box args={[7, 4, 0.2]} position={[0, 2, -1.1]}>
+              <meshBasicMaterial color="#949494" />
+            </Box> */}
+          </group>
         </XR>
       </Canvas>
     </>

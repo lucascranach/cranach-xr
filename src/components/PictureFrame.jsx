@@ -31,6 +31,14 @@ const PictureFrame = ({ imgSrc, ...props }) => {
       >
         <meshBasicMaterial color="black" />
       </Box>
+      {props.data.images.reverse && (
+        <Image
+          position={[0, 0, -0.052]}
+          url={props.data.images.reverse.images[0].sizes.medium.src}
+          scale={imageScale}
+          rotation-y={Math.PI}
+        />
+      )}
     </group>
   )
 }

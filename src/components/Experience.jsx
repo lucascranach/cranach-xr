@@ -22,8 +22,6 @@ import Curve from "./legacy/Curve"
 
 import { calculateImageScale } from "../utils/calculateImageScale"
 
-const arr = [0, 0, 0, 0, 0, 0, 0, 0]
-
 export const Experience = (props) => {
   const artworksData = useAtomValue(artworksAtom)
 
@@ -41,28 +39,22 @@ export const Experience = (props) => {
         </Curve>
       </Flex> */}
 
-      {/* <Draggable playerRef={props.originRef}>
-        <group position={[-0.6, 1.3, -0.5]}>
-          <Root>
-            <Modal data={artworksData[0]} />
-          </Root>
-        </group>
-      </Draggable> */}
-
-      <group
-        position={[-calculateImageScale(artworksData[1])[0] - 0.2, 1.8, -0.9]}
-      >
+      <group position={[-0.5, 2, -0.9]}>
         <Flex
           flexDirection="row"
           padding={0}
           margin={0}
-          // alignItems={"flex-end"}
-          alignItems={"center"}
+          alignItems={"flex-end"}
         >
           {artworksData.map(
             (data, index) =>
               index < 10 && (
-                <group key={data.id}>
+                <group
+                  key={data.id}
+                  onClick={() => {
+                    console.log("Clicked on artwork:", data)
+                  }}
+                >
                   <Flexbox margin={0.2} centerAnchor={true} key={data.id}>
                     <Draggable playerRef={props.originRef}>
                       <group key={index} position={[0, 0, 0]}>
@@ -70,7 +62,11 @@ export const Experience = (props) => {
                       </group>
                     </Draggable>
                   </Flexbox>
-                  <Flexbox marginRight={1} centerAnchor={true}>
+                  <Flexbox
+                    marginRight={1}
+                    marginBottom={0.25}
+                    centerAnchor={true}
+                  >
                     <Root>
                       <Modal data={data} />
                     </Root>
