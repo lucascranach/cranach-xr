@@ -53,9 +53,9 @@ const Scene = () => {
             >
               <meshBasicMaterial color="#949494" />
             </Plane>
-            {/* <Box args={[7, 4, 0.2]} position={[0, 2, -1.1]}>
+            <Box args={[7, 4, 0.2]} position={[0, 2, -1.1]}>
               <meshBasicMaterial color="#949494" />
-            </Box> */}
+            </Box>
           </group>
         </XR>
       </Canvas>

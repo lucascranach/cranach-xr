@@ -20,25 +20,11 @@ import Draggable from "./Draggable"
 
 import Curve from "./legacy/Curve"
 
-import { calculateImageScale } from "../utils/calculateImageScale"
-
 export const Experience = (props) => {
   const artworksData = useAtomValue(artworksAtom)
 
   return (
     <>
-      {/* <Flex flexDirection="row" padding={0} margin={0} alignItems={"center"}>
-        <Curve>
-          {arr.map((data, index) => (
-            <Flexbox key={index} margin={0} centerAnchor={true}>
-              <Box args={[index / 5, 0.1, 0.1]} position={[0, 0, 0]}>
-                <meshStandardMaterial color="blue" />
-              </Box>
-            </Flexbox>
-          ))}
-        </Curve>
-      </Flex> */}
-
       <group position={[-0.5, 2, -0.9]}>
         <Flex
           flexDirection="row"
@@ -51,22 +37,20 @@ export const Experience = (props) => {
               index < 10 && (
                 <group
                   key={data.id}
-                  onClick={() => {
+                  onClick={(e) => {
+                    console.log("Clicked on artwork:", e)
                     console.log("Clicked on artwork:", data)
                   }}
                 >
-                  <Flexbox margin={0.2} centerAnchor={true} key={data.id}>
+                  <Flexbox margin={0} centerAnchor={true} key={data.id}>
                     <Draggable playerRef={props.originRef}>
                       <group key={index} position={[0, 0, 0]}>
                         <PictureFrame key={index} data={data} index={index} />
                       </group>
                     </Draggable>
                   </Flexbox>
-                  <Flexbox
-                    marginRight={1}
-                    marginBottom={0.25}
-                    centerAnchor={true}
-                  >
+
+                  <Flexbox centerAnchor={true} marginRight={1}>
                     <Root>
                       <Modal data={data} />
                     </Root>
@@ -76,6 +60,33 @@ export const Experience = (props) => {
           )}
         </Flex>
       </group>
+      {/* <group rotation={[0, Math.PI, 0]} position={[0, 1.5, 0]}>
+        <Curve>
+          {artworksData.map(
+            (data, index) =>
+              index < 10 && (
+                <>
+                  <Box args={[0.05, 2, 0.05]} position={[0, 0, 0]}>
+                    <meshBasicMaterial color="red" />
+                  </Box>
+
+                  <group key={index} position={[0, 0, 0]}>
+                    <Draggable playerRef={props.originRef}>
+                      <PictureFrame key={index} data={data} index={index} />
+                    </Draggable>
+                  </group>
+                </>
+              )
+          )}
+        </Curve>
+      </group> */}
+      {/* <Curve>
+        {Array.from({ length: 10 }, (_, index) => (
+          <Plane key={index} args={[1, 1]} rotation={[Math.PI / -2, 0, 0]}>
+            <meshBasicMaterial color="red" />
+          </Plane>
+        ))}
+      </Curve> */}
     </>
   )
 }

@@ -18,6 +18,9 @@ const PictureFrame = ({ imgSrc, ...props }) => {
     console.log(imageScale)
     console.log(e)
   }
+
+  const frameSize = 0.025
+
   return (
     <group>
       <Image
@@ -25,7 +28,7 @@ const PictureFrame = ({ imgSrc, ...props }) => {
         url={props.data.images.overall.images[0].sizes.medium.src}
       />
       <Box
-        args={[imageScale[0] + 0.1, imageScale[1] + 0.1, 0.05]}
+        args={[imageScale[0] + frameSize, imageScale[1] + frameSize, 0.05]}
         scale={[1, 1, 1]}
         position={[0, 0, -0.026]}
       >

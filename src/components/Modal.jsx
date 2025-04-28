@@ -5,23 +5,20 @@ import { trimText } from "../utils/trimText"
 const Modal = ({ data, ...props }) => {
   return (
     <>
-      <Card
-        borderRadius={1}
-        borderColor={"white"}
-        padding={4}
-        gap={1}
+      <Container
         flexDirection="column"
-        width={50}
-        backgroundColor={"white"}
-        opacity={0.2}
+        width={100}
+        // backgroundColor={"white"}
+        gap={4}
+        paddingLeft={3}
       >
-        <Text fontSize={3.2} color={"black"}>
+        <Text fontSize={5} color={"black"} fontWeight={700}>
           {data.metadata.title}
         </Text>
-        <Text fontSize={2} opacity={0.9} color={"black"}>
+        <Text fontSize={5} opacity={0.9} color={"black"}>
           {trimText(data.description, 300)}
         </Text>
-      </Card>
+      </Container>
     </>
   )
 }
