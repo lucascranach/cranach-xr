@@ -1,6 +1,11 @@
 import React, { useRef, useState, Suspense, memo } from "react"
 import * as THREE from "three"
-import { XR, createXRStore, XROrigin } from "@react-three/xr"
+import {
+  XR,
+  createXRStore,
+  XROrigin,
+  useXRControllerLocomotion,
+} from "@react-three/xr"
 import { Canvas, useFrame, useLoader } from "@react-three/fiber"
 import {
   MapControls,
@@ -20,18 +25,26 @@ const store = createXRStore({
   hand: { left: false, right: false },
 })
 
+const XRLocomotion = ({ originRef }) => {
+  useXRControllerLocomotion(originRef)
+  return null
+}
+
 const Scene = () => {
+  const originRef = useRef(null)
+
   return (
     <>
       <button onClick={() => store.enterVR()}>Enter VR</button>
       <button onClick={() => store.enterAR()}>Enter AR</button>
       <Canvas>
         <XR store={store}>
-          <XROrigin />
+          <XROrigin ref={originRef} />
+          <XRLocomotion originRef={originRef} />
           {/* <Stage /> */}
           <OrbitControls />
           <Grid position={[0, 0.01, 0]} />
-          <Experience />
+          <Experience originRef={originRef} />
           <Plane
             args={[7, 2]}
             rotation={[Math.PI / -2, 0, 0]}
