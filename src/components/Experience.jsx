@@ -52,16 +52,13 @@ export const Experience = (props) => {
     artworksBaseY: { value: 1.3, min: -5, max: 5, step: 0.1 }, // Base Y for artworks/modals
     modalOffsetX: { value: 0.5, min: 0, max: 2, step: 0.05 }, // Horizontal space between painting edge and modal
     modalOffsetY: { value: 0.26, min: -0.5, max: 2.5, step: 0.01 }, // Fine-tune vertical offset of modal relative to artwork bottom
-    floorLineColor: { value: "#141414" }, // Color picker for the line
+    floorLineColor: { value: "#343434" }, // Color picker for the line
     floorLineDepth: { value: 0.05, min: -1, max: 1, step: 0.05 }, // Z position of the line
     dateLineBaseY: { value: 0.01, min: -5, max: 5, step: 0.01 }, // Absolute Y position of the date/line group
     dateTextRelativeY: { value: 0.37, min: -0.5, max: 0.5, step: 0.01 }, // Position of text relative to the line within the group
   })
 
   let currentX = 0 // Keep track of the current X position for groups
-
-  // Add a console log to verify control values are updating
-  console.log("Leva Controls:", { modalOffsetX, modalOffsetY })
 
   return (
     <>
@@ -123,11 +120,6 @@ export const Experience = (props) => {
                 <group
                   key={data.id}
                   position={[artworkPositionX, artworkPositionY, 0]}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    console.log(data.metadata.date)
-                    console.log(data)
-                  }}
                 >
                   <Draggable playerRef={props.originRef}>
                     {/* PictureFrame is at the center [0,0,0] of this group */}

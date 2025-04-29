@@ -13,12 +13,6 @@ const PictureFrame = ({ imgSrc, ...props }) => {
     return calculateImageScale(props.data)
   }, [props.data])
 
-  function handerClick(e) {
-    console.log(props.data.inventoryNumber)
-    console.log(imageScale)
-    console.log(e)
-  }
-
   const frameSize = 0.025
 
   return (

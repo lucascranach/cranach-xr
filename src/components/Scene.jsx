@@ -21,7 +21,7 @@ import { useControls, Leva } from "leva"
 import { Experience } from "./Experience"
 
 const store = createXRStore({
-  controller: { left: false },
+  controller: { left: true, rayPointer: true },
   hand: { left: false, right: false },
 })
 
@@ -43,9 +43,11 @@ const Scene = () => {
             <XROrigin ref={originRef} />
             <XRLocomotion originRef={originRef} />
             {/* <Stage /> */}
-            <OrbitControls />
-            <Grid position={[0, 0.01, 0]} />
-            <Experience originRef={originRef} />
+            {/* <OrbitControls /> */}
+            {/* <Grid position={[0, 0.01, 0]} /> */}
+            <group position={[0, 0, -1]}>
+              <Experience originRef={originRef} />
+            </group>
             {/* <group position={[2.6, 0, 0]}>
               <Plane
                 args={[7, 2]}
