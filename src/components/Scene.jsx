@@ -37,28 +37,30 @@ const Scene = () => {
     <>
       <button onClick={() => store.enterVR()}>Enter VR</button>
       <button onClick={() => store.enterAR()}>Enter AR</button>
-      <Canvas>
-        <XR store={store}>
-          <XROrigin ref={originRef} />
-          <XRLocomotion originRef={originRef} />
-          {/* <Stage /> */}
-          <OrbitControls />
-          <Grid position={[0, 0.01, 0]} />
-          <Experience originRef={originRef} />
-          <group position={[2.6, 0, 0]}>
-            <Plane
-              args={[7, 2]}
-              rotation={[Math.PI / -2, 0, 0]}
-              position={[0, 0, 0]}
-            >
-              <meshBasicMaterial color="#949494" />
-            </Plane>
-            <Box args={[7, 4, 0.2]} position={[0, 2, -1.1]}>
-              <meshBasicMaterial color="#949494" />
-            </Box>
-          </group>
-        </XR>
-      </Canvas>
+      <Suspense fallback={null}>
+        <Canvas>
+          <XR store={store}>
+            <XROrigin ref={originRef} />
+            <XRLocomotion originRef={originRef} />
+            {/* <Stage /> */}
+            <OrbitControls />
+            <Grid position={[0, 0.01, 0]} />
+            <Experience originRef={originRef} />
+            {/* <group position={[2.6, 0, 0]}>
+              <Plane
+                args={[7, 2]}
+                rotation={[Math.PI / -2, 0, 0]}
+                position={[0, 0, 0]}
+              >
+                <meshBasicMaterial color="#949494" />
+              </Plane>
+              <Box args={[7, 4, 0.2]} position={[0, 2, -1.1]}>
+                <meshBasicMaterial color="#949494" />
+              </Box>
+            </group> */}
+          </XR>
+        </Canvas>
+      </Suspense>
     </>
   )
 }

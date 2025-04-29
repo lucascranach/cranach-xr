@@ -32,7 +32,7 @@ const PictureFrame = ({ imgSrc, ...props }) => {
         scale={[1, 1, 1]}
         position={[0, 0, -0.026]}
       >
-        <meshBasicMaterial color="black" />
+        <meshBasicMaterial color="#434343" />
       </Box>
       {props.data.images.reverse && (
         <Image
