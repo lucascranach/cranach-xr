@@ -5,6 +5,7 @@ import {
   createXRStore,
   XROrigin,
   useXRControllerLocomotion,
+  DefaultXRController,
 } from "@react-three/xr"
 import { Canvas, useFrame, useLoader } from "@react-three/fiber"
 import {
@@ -21,14 +22,17 @@ import { useControls, Leva } from "leva"
 import { Experience } from "./Experience"
 
 const store = createXRStore({
-  controller: { left: true, rayPointer: true },
-  hand: { left: false, right: false },
+  controller: { left: false, right: true, rayPointer: true },
+  hand: false,
+  frameRate: "high"
 })
 
 const XRLocomotion = ({ originRef }) => {
   useXRControllerLocomotion(originRef)
   return null
 }
+
+
 
 const Scene = () => {
   const originRef = useRef(null)
@@ -43,7 +47,7 @@ const Scene = () => {
             <XROrigin ref={originRef} />
             <XRLocomotion originRef={originRef} />
             {/* <Stage /> */}
-            {/* <OrbitControls /> */}
+            <OrbitControls />
             {/* <Grid position={[0, 0.01, 0]} /> */}
             <group position={[0, 0, -1]}>
               <Experience originRef={originRef} />

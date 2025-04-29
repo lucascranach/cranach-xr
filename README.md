@@ -1,13 +1,8 @@
 # Cranach XR
 
-```
- npx json-server cda-paintings-v2.de.json --port 8080
-```
-
 TODO
 
-- jahreszahlen anzeigen
-- bilder abstand buggy
-- bilder progress buggy
-- bilder meta daten anzeigen (verknüpfte werke)
-- bilder richten sich nach dem viewport (winkel)
+- [BUG] controller deactives when holding straight down
+- [BUG] adjust spacing between headline and description when there is more than one line
+- [BUG] one painting has still wrong size
+- [FEATURE] display sizes of paintings

@@ -39,7 +39,7 @@ const Modal = ({ data, ...props }) => {
 
       {/* Title Text */}
       <Text
-        position={[leftEdgeX, 0.0, 0]} // Position text at the left edge
+        position={[leftEdgeX, 0, 0]} // Position text at the left edge
         fontSize={titleFontSize}
         color={textColor}
         maxWidth={backgroundWidth - padding * 2}
