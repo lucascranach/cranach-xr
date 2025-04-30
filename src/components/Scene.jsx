@@ -38,8 +38,10 @@ const Scene = () => {
 
   return (
     <>
-      <button onClick={() => store.enterVR()}>Enter VR</button>
-      <button onClick={() => store.enterAR()}>Enter AR</button>
+      <button onClick={() => store.enterVR()} className="xr-button">
+        Enter VR
+      </button>
+      {/* <button onClick={() => store.enterAR()}>Enter AR</button> */}
       <Suspense fallback={null}>
         <Canvas>
           <XR store={store}>
@@ -47,7 +49,7 @@ const Scene = () => {
             <XRLocomotion originRef={originRef} />
             {/* <Stage /> */}
             <OrbitControls />
-            <Grid position={[0, 0.01, 0]} />
+            {/* <Grid position={[0, 0.01, 0]} /> */}
             <group position={[2.4, 0, -1]}>
               <Experience originRef={originRef} />
             </group>

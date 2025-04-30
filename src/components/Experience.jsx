@@ -1,30 +1,29 @@
-import React, { useEffect, useMemo, useRef, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState, useCallback } from "react"
 import { useAtomValue } from "jotai"
-import { Image, Box, Html, Text3D, Text, Plane } from "@react-three/drei" // Make sure Plane is imported
-import { useFrame } from "@react-three/fiber"
+import { Image, Box, Html, Text3D, Text, Plane } from "@react-three/drei"
+import { useFrame, useThree } from "@react-three/fiber"
 import * as THREE from "three"
-import { useControls } from "leva" // Import useControls
-// Removed uikit imports
+import { useControls } from "leva"
+import { throttle } from "lodash-es" // Keep the import
 import {
   XROrigin,
   useXRInputSourceState,
   useXRControllerLocomotion,
+  useXR,
 } from "@react-three/xr"
 
 import { artworksAtom } from "../store/atom"
 
 import PictureFrame from "./PictureFrame"
-// import Modal from "./Modal"; // Remove old import
-import Modal from "./Modal" // Assuming Modal.jsx is the correct component
+import Modal from "./Modal"
 import Draggable from "./Draggable"
 
-import Curve from "./legacy/Curve"
-
 import { calculateImageScale } from "../utils/calculateImageScale"
-import { sortAndGroupArtworks } from "../utils/sortAndGroupArtworks" // Import the helper function
+import { sortAndGroupArtworks } from "../utils/sortAndGroupArtworks"
 
-// Define modal width constant (or get from Modal component if possible/needed)
-const MODAL_FIXED_WIDTH = 1 // Based on maxWidth in Modal.jsx
+const MODAL_FIXED_WIDTH = 1
+const VISIBLE_ARTWORK_COUNT = 10
+const VISIBILITY_UPDATE_THROTTLE = 200
 
 export const Experience = (props) => {
   const artworksData = useAtomValue(artworksAtom)
@@ -33,177 +32,276 @@ export const Experience = (props) => {
     [artworksData]
   )
 
-  // Add Leva controls for spacing
   const {
     groupSpacing,
     artworkSpacing,
-    // basePositionY, // Removed
-    artworksBaseY, // New control for artwork/modal vertical position
-    modalOffsetX, // Horizontal space between painting edge and modal
-    modalOffsetY, // Fine-tune vertical offset for modal bottom alignment relative to artwork bottom
-    floorLineColor, // Control for floor line color
-    floorLineDepth, // Control for floor line Z position
-    dateLineBaseY, // Renamed control for the absolute Y position of the date/line group
-    dateTextRelativeY, // Control vertical offset of date text relative to the line
+    artworksBaseY,
+    modalOffsetX,
+    modalOffsetY,
+    floorLineColor,
+    floorLineDepth,
+    dateLineBaseY,
+    dateTextRelativeY,
+    useThrottle, // Add Leva control for throttling
   } = useControls({
     groupSpacing: { value: 2.2, min: 0.1, max: 10, step: 0.1 },
     artworkSpacing: { value: 1.35, min: 0.05, max: 2, step: 0.05 },
-    // basePositionY: { value: 1.3, min: -5, max: 5, step: 0.1 }, // Removed
-    artworksBaseY: { value: 1.3, min: -5, max: 5, step: 0.1 }, // Base Y for artworks/modals
-    modalOffsetX: { value: 0.5, min: 0, max: 2, step: 0.05 }, // Horizontal space between painting edge and modal
-    modalOffsetY: { value: 0.26, min: -0.5, max: 2.5, step: 0.01 }, // Fine-tune vertical offset of modal relative to artwork bottom
-    floorLineColor: { value: "#343434" }, // Color picker for the line
-    floorLineDepth: { value: 0.05, min: -1, max: 1, step: 0.05 }, // Z position of the line
-    dateLineBaseY: { value: 0.01, min: -5, max: 5, step: 0.01 }, // Absolute Y position of the date/line group
-    dateTextRelativeY: { value: 0.37, min: -0.5, max: 0.5, step: 0.01 }, // Position of text relative to the line within the group
+    artworksBaseY: { value: 1.3, min: -5, max: 5, step: 0.1 },
+    modalOffsetX: { value: 0.5, min: 0, max: 2, step: 0.05 },
+    modalOffsetY: { value: 0.26, min: -0.5, max: 2.5, step: 0.01 },
+    floorLineColor: { value: "#343434" },
+    floorLineDepth: { value: 0.05, min: -1, max: 1, step: 0.05 },
+    dateLineBaseY: { value: 0.01, min: -5, max: 5, step: 0.01 },
+    dateTextRelativeY: { value: 0.37, min: -0.5, max: 0.5, step: 0.01 },
+    useThrottle: { value: true, label: "Use Throttle" }, // Default to true or false as needed
   })
 
-  let currentX = 0 // Keep track of the current X position for groups
+  const [visibleArtworkIds, setVisibleArtworkIds] = useState(new Set())
+  const { camera } = useThree()
+  const { isPresenting } = useXR()
+
+  // Pre-calculate artwork world positions and IDs (remains the same)
+  const artworkPositions = useMemo(() => {
+    // ... calculation logic ...
+    const positions = []
+    let currentX = 0
+
+    groupedArtworks.forEach((group) => {
+      const groupStartPosition = currentX
+      let artworkOffsetX = 0
+      let calculatedGroupWidth = 0
+      const numArtworksInGroup = group.artworks.length
+
+      group.artworks.forEach((data, index) => {
+        if (index < 100) {
+          const [width] = calculateImageScale(data)
+          const artworkWorldX = groupStartPosition + artworkOffsetX + width / 2
+          positions.push({ id: data.id, x: artworkWorldX })
+
+          calculatedGroupWidth += width
+          artworkOffsetX += width
+          if (index < numArtworksInGroup - 1 && index < 99) {
+            const spacing = artworkSpacing
+            calculatedGroupWidth += spacing
+            artworkOffsetX += spacing
+          }
+        }
+      })
+
+      if (numArtworksInGroup > 0 && numArtworksInGroup <= 100) {
+        calculatedGroupWidth += modalOffsetX + MODAL_FIXED_WIDTH
+      }
+      const groupWidth = Math.max(calculatedGroupWidth, 0.1)
+      currentX += groupWidth + groupSpacing
+    })
+    return positions
+  }, [
+    groupedArtworks,
+    groupSpacing,
+    artworkSpacing,
+    modalOffsetX,
+    artworksData,
+  ])
+
+  // Core logic for updating visible artworks (remains the same)
+  const _updateVisibleArtworksLogic = useCallback(() => {
+    if (!artworkPositions.length) return
+
+    let playerX
+    const tempVec = new THREE.Vector3()
+
+    if (isPresenting && props.originRef?.current) {
+      props.originRef.current.getWorldPosition(tempVec)
+      playerX = tempVec.x
+    } else if (camera) {
+      camera.getWorldPosition(tempVec)
+      playerX = tempVec.x
+    } else {
+      return
+    }
+
+    const artworksWithDistance = artworkPositions.map((artwork) => ({
+      ...artwork,
+      distance: Math.abs(playerX - artwork.x),
+    }))
+
+    artworksWithDistance.sort((a, b) => a.distance - b.distance)
+
+    const closestIds = new Set(
+      artworksWithDistance.slice(0, VISIBLE_ARTWORK_COUNT).map((a) => a.id)
+    )
+
+    setVisibleArtworkIds((prevVisibleIds) => {
+      if (
+        closestIds.size !== prevVisibleIds.size ||
+        ![...closestIds].every((id) => prevVisibleIds.has(id))
+      ) {
+        return closestIds
+      }
+      return prevVisibleIds
+    })
+  }, [props.originRef, artworkPositions, camera, isPresenting])
+
+  // Create the throttled function instance separately using useMemo
+  const throttledUpdate = useMemo(() => {
+    // This function will only be created once, or when the core logic changes
+    return throttle(_updateVisibleArtworksLogic, VISIBILITY_UPDATE_THROTTLE, {
+      leading: true,
+      trailing: true,
+    })
+  }, [_updateVisibleArtworksLogic]) // Dependency is the core logic function
+
+  // Effect to cancel the throttle when useThrottle becomes false or on unmount
+  useEffect(() => {
+    // Return a cleanup function
+    return () => {
+      // console.log("Cleaning up throttle"); // Optional: for debugging
+      throttledUpdate.cancel()
+    }
+  }, [throttledUpdate]) // Run cleanup when the throttled function instance changes (or on unmount)
+
+  // Determine which function to call in useFrame based on the Leva control
+  const updateVisibleArtworks = useThrottle
+    ? throttledUpdate
+    : _updateVisibleArtworksLogic
+
+  // Update visibility on frame using the selected function
+  useFrame(() => {
+    // updateVisibleArtworks will be either the raw or throttled function
+    updateVisibleArtworks()
+  })
+
+  // --- Rendering Logic --- (remains the same)
+  let currentX = 0
 
   return (
     <>
-      {/* Removed outer Flex container */}
+      {/* Intro Text */}
+      <group position={[-3, 1.65, -0.3]}>
+        {/* ... Text ... */}
+        <Text
+          fontSize={0.3}
+          anchorX="left"
+          anchorY="top"
+          color={floorLineColor}
+        >
+          Lucas Cranach
+        </Text>
+        <Text
+          position={[0, -0.15, 0]}
+          fontSize={0.15}
+          anchorX="left"
+          anchorY="top"
+          color={floorLineColor}
+        >
+          Meisterwerke
+        </Text>
+      </group>
+
       {groupedArtworks.map((group, groupIndex) => {
-        const groupStartPosition = currentX // Store the start X for this group
-
-        // --- Calculate Group Width ---
-        // Calculate the width accurately *before* mapping artworks
+        const groupStartPosition = currentX
         let calculatedGroupWidth = 0
-        const numArtworksInGroup = group.artworks.length // Use actual count
+        const numArtworksInGroup = group.artworks.length
+        let artworkOffsetX = 0
 
+        // Calculate Group Width (remains the same)
         group.artworks.forEach((data, index) => {
           if (index < 100) {
-            // Keep your limit if needed
             const [width] = calculateImageScale(data)
-            calculatedGroupWidth += width // Add artwork width
-            // Add spacing *between* artworks
+            calculatedGroupWidth += width
             if (index < numArtworksInGroup - 1 && index < 99) {
               calculatedGroupWidth += artworkSpacing
             }
           }
         })
-
-        // Add width for the last modal and its offset if there are artworks
         if (numArtworksInGroup > 0 && numArtworksInGroup <= 100) {
-          // Check if artworks exist within limit
           calculatedGroupWidth += modalOffsetX + MODAL_FIXED_WIDTH
         }
-
-        // Ensure width is at least a small positive number to avoid zero-width plane
         const groupWidth = Math.max(calculatedGroupWidth, 0.1)
-        // --- End Calculate Group Width ---
 
-        let artworkOffsetX = 0 // Keep track of X offset within the group
-
+        // Render Artworks Group (remains the same)
         const groupJSX = (
-          // Group container for each date group's artworks and modals
-          // Position this group at the calculated start X and the artworksBaseY
           <group
-            key={`${group.date}-artworks`} // Unique key
-            position={[groupStartPosition, artworksBaseY, 0]} // Use artworksBaseY here
+            key={`${group.date}-artworks`}
+            position={[groupStartPosition, artworksBaseY, 0]}
           >
-            {/* Map artworks within the group */}
             {group.artworks.map((data, index) => {
-              if (index >= 100) return null // Ensure consistency with width calculation limit
+              if (index >= 100) return null
 
               const [width, height] = calculateImageScale(data)
-              // Position artwork relative to group origin (which is at [groupStartPosition, artworksBaseY, 0])
-              const artworkPositionY = height / 2 // Center artwork vertically such that its bottom is at y=0 (relative to group)
-              const artworkPositionX = artworkOffsetX + width / 2 // Center artwork horizontally relative to its start offset
-
-              // Update offset for the next artwork.
+              const artworkPositionY = height / 2
+              const currentArtworkOffset = artworkOffsetX
               artworkOffsetX += width + artworkSpacing
 
+              // LAZY LOADING CHECK (remains the same)
+              if (!visibleArtworkIds.has(data.id)) {
+                return null
+              }
+
+              // Render visible artwork (remains the same)
               return (
-                // This group holds both the Draggable PictureFrame and the Modal
-                // Position is relative to the date group's origin (artworksBaseY)
                 <group
                   key={data.id}
-                  position={[artworkPositionX, artworkPositionY, 0]}
+                  position={[
+                    currentArtworkOffset + width / 2,
+                    artworkPositionY,
+                    0,
+                  ]}
                 >
                   <Draggable playerRef={props.originRef}>
-                    {/* PictureFrame is at the center [0,0,0] of this group */}
                     <group>
-                      <PictureFrame key={data.id} data={data} index={index} />
+                      <PictureFrame
+                        key={`${data.id}-frame`}
+                        data={data}
+                        index={index}
+                      />
                     </group>
                   </Draggable>
-
-                  {/* Position Modal group relative to the PictureFrame group */}
-                  {/* Modal origin is its bottom-left */}
                   <group
                     position={[
-                      width / 2 + modalOffsetX, // X: Relative to painting center -> places left edge next to painting right edge + offset
-                      -height / 2 + modalOffsetY, // Y: Relative to painting center -> places bottom edge at painting bottom edge + offset
-                      0.05, // Z: Slightly in front
+                      width / 2 + modalOffsetX,
+                      -height / 2 + modalOffsetY,
+                      0.05,
                     ]}
                   >
-                    <Modal data={data} />
+                    <Modal key={`${data.id}-modal`} data={data} />
                   </group>
                 </group>
               )
             })}
-          </group> // End of artworks group for this date
+          </group>
         )
 
+        // Render Date/Line Group (remains the same)
         const dateLineGroupJSX = (
-          // Group container for the Date Text and Floor Line for this date
-          // Position this group at the calculated start X and the absolute dateLineBaseY
           <group
-            key={`${group.date}-dateline`} // Unique key
-            position={[groupStartPosition, dateLineBaseY, -0.3]} // Use dateLineBaseY here
+            key={`${group.date}-dateline`}
+            position={[groupStartPosition, dateLineBaseY, -0.3]}
           >
-            {/* Floor Line - Position relative to the dateLine group */}
             <Plane
-              args={[groupWidth, 0.02]} // Use the updated groupWidth including modal space
-              position={[groupWidth / 2, 0, floorLineDepth]} // Center X relative to group start, Y=0 within this group, controlled Z
-              rotation={[-Math.PI / 2, 0, 0]} // Rotate to lie flat on XZ plane
+              args={[groupWidth, 0.02]}
+              position={[groupWidth / 2, 0, floorLineDepth]}
+              rotation={[-Math.PI / 2, 0, 0]}
             >
               <meshBasicMaterial
                 color={floorLineColor}
                 side={THREE.DoubleSide}
               />
             </Plane>
-            {/* Date Text - Position relative to the dateLine group */}
             <Text
-              position={[0, dateTextRelativeY, 0]} // Y is relative to the line/group origin, Z=0
+              position={[0, dateTextRelativeY, 0]}
               fontSize={0.3}
-              color={floorLineColor} // Changed color for visibility
+              color={floorLineColor}
               anchorX="left"
-              anchorY="top" // Anchor top of text to the position
+              anchorY="top"
             >
               {group.date}
-            </Text>
-          </group> // End of date/line group for this date
-        )
-
-        const introGroup = (
-          <group position={[-3, 1.65, -0.3]}>
-            <Text
-              fontSize={0.3}
-              anchorX="left"
-              anchorY="top"
-              color={floorLineColor}
-            >
-              Lucas Cranach
-            </Text>
-            <Text
-              position={[0, 0.15, 0]} // Adjusted Y position for spacing
-              fontSize={0.15}
-              anchorX="left"
-              anchorY="top"
-              color={floorLineColor}
-            >
-              Meisterwerke
             </Text>
           </group>
         )
 
-        // Update currentX for the next group
-        // Add groupSpacing *after* calculating the full width of the current group
         currentX += groupWidth + groupSpacing
-
-        // Return both groups for rendering
-        return [groupJSX, dateLineGroupJSX, introGroup]
+        return [groupJSX, dateLineGroupJSX]
       })}
     </>
   )
