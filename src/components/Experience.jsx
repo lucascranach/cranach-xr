@@ -187,7 +187,7 @@ export const Experience = (props) => {
               Lucas Cranach
             </Text>
             <Text
-              position={[0, 0.15, 0]} // Adjusted Y position for spacing
+              position={[0.015, 0.15, 0]} // Adjusted Y position for spacing
               fontSize={0.15}
               anchorX="left"
               anchorY="top"
