@@ -16,5 +16,6 @@ export default defineConfig(({ command, mode }) => {
     define: {
       "process.env": env,
     },
+    base: "/xr/",
   }
 })
