@@ -17,6 +17,7 @@ import {
   OrbitControls,
   Box,
   Text,
+  SpotLight,
   Plane,
 } from "@react-three/drei"
 import { useControls, Leva } from "leva"
@@ -45,25 +46,17 @@ const Scene = () => {
           <XR store={store}>
             <XROrigin ref={originRef} />
             <XRLocomotion originRef={originRef} />
-            {/* <Stage /> */}
+            {/* <ambientLight intensity={1} /> */}
+
+            {/* <mesh rotation={[0, 10, 0]}>
+              <boxGeometry attach="geometry" args={[1, 1, 1]} />
+              <meshStandardMaterial attach="material" color={"#6be092"} />
+            </mesh> */}
             <OrbitControls />
-            <Grid position={[0, 0.01, 0]} />
+            {/* <Grid position={[0, 0.01, 0]} /> */}
             <group position={[2.4, 0, -1]}>
               <Experience originRef={originRef} />
             </group>
-
-            {/* <group position={[2.6, 0, 0]}>
-              <Plane
-                args={[7, 2]}
-                rotation={[Math.PI / -2, 0, 0]}
-                position={[0, 0, 0]}
-              >
-                <meshBasicMaterial color="#949494" />
-              </Plane>
-              <Box args={[7, 4, 0.2]} position={[0, 2, -1.1]}>
-                <meshBasicMaterial color="#949494" />
-              </Box>
-            </group> */}
           </XR>
         </Canvas>
       </Suspense>

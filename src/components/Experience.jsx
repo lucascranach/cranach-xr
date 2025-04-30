@@ -178,12 +178,7 @@ export const Experience = (props) => {
 
         const introGroup = (
           <group position={[-3, 1.65, -0.3]}>
-            <Text
-              fontSize={0.3}
-              anchorX="left"
-              anchorY="top"
-              color={floorLineColor}
-            >
+            <Text fontSize={0.3} anchorX="left" anchorY="top" color="white">
               Lucas Cranach
             </Text>
             <Text
@@ -191,7 +186,8 @@ export const Experience = (props) => {
               fontSize={0.15}
               anchorX="left"
               anchorY="top"
-              color={floorLineColor}
+              color="white"
+              fontWeight={200}
             >
               Meisterwerke
             </Text>

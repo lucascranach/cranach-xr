@@ -6,10 +6,11 @@ TODO
 - intro texte weiß, mengentext
 - modal nach hinten am bild ausrichten
 - Smooth schwenken
-- Sizes am bild einblenden per knopfdruck
 - schnelleres gehen / teleportation
 - linie heller
+- timeline
+- [FEATURE] display sizes of paintings via button click
 
-- [TASK] lazy load images/content
-- [FEATURE] display sizes of paintings
+DONE
+
 - [FEATURE] display about section/intro: lucas cranach, 100 Meisterwerke

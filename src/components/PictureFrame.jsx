@@ -1,5 +1,13 @@
 import React, { useMemo, useRef, useState } from "react"
-import { Image, Box, Html, Text3D, Text, Line } from "@react-three/drei"
+import {
+  Image,
+  Box,
+  Html,
+  Text3D,
+  Text,
+  Line,
+  SpotLight,
+} from "@react-three/drei"
 import { useFrame } from "@react-three/fiber"
 import * as THREE from "three"
 
@@ -21,12 +29,17 @@ const PictureFrame = ({ imgSrc, ...props }) => {
         scale={imageScale}
         url={props.data.images.overall.images[0].sizes.medium.src}
       />
+
       <Box
         args={[imageScale[0] + frameSize, imageScale[1] + frameSize, 0.05]}
         scale={[1, 1, 1]}
         position={[0, 0, -0.026]}
       >
-        <meshBasicMaterial color="#434343" />
+        <pointLight position={[-1, 4, 0]} intensity={10} />
+
+        <meshStandardMaterial attach="material" color={"#434343"} />
+
+        {/* <meshBasicMaterial color="#434343" /> */}
       </Box>
       {props.data.images.reverse && (
         <Image
