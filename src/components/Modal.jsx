@@ -89,7 +89,7 @@ const Modal = ({ data, ...props }) => {
         maxWidth={backgroundWidth - padding * 2}
         anchorX="left" // Align text start to the position.x
         anchorY="top" // Anchor text top to its position
-        lineHeight={1} // Adjust line height if title wraps
+        lineHeight={1.3} // Adjust line height if title wraps
         textAlign="left" // Explicitly set text alignment
         onSync={onTitleSync} // Add the sync callback
       >
