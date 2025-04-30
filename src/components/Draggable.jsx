@@ -14,7 +14,20 @@ function Draggable({ children, playerRef }) {
     if (isDraggingRef.current && childRef.current && camera) {
       const cameraPosition = new THREE.Vector3()
       camera.getWorldPosition(cameraPosition)
-      childRef.current.lookAt(cameraPosition)
+
+      // Get the object's current world position
+      const objectPosition = childRef.current.getWorldPosition(
+        new THREE.Vector3()
+      )
+
+      // Create a target position with the camera's X/Z but the object's Y
+      const lookAtTarget = new THREE.Vector3(
+        cameraPosition.x,
+        objectPosition.y, // Use the object's current Y position
+        cameraPosition.z
+      )
+
+      childRef.current.lookAt(lookAtTarget)
     }
   })
 

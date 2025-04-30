@@ -176,12 +176,34 @@ export const Experience = (props) => {
           </group> // End of date/line group for this date
         )
 
+        const introGroup = (
+          <group position={[-3, 1.65, -0.3]}>
+            <Text
+              fontSize={0.3}
+              anchorX="left"
+              anchorY="top"
+              color={floorLineColor}
+            >
+              Lucas Cranach
+            </Text>
+            <Text
+              position={[0, 0.15, 0]} // Adjusted Y position for spacing
+              fontSize={0.15}
+              anchorX="left"
+              anchorY="top"
+              color={floorLineColor}
+            >
+              Meisterwerke
+            </Text>
+          </group>
+        )
+
         // Update currentX for the next group
         // Add groupSpacing *after* calculating the full width of the current group
         currentX += groupWidth + groupSpacing
 
         // Return both groups for rendering
-        return [groupJSX, dateLineGroupJSX]
+        return [groupJSX, dateLineGroupJSX, introGroup]
       })}
     </>
   )
