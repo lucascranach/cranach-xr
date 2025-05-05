@@ -224,7 +224,7 @@ export const Experience = (props) => {
               fontWeight={100}
               position={[0, -1.64, 0.1]} // Adjusted Y position for spacing
               rotation={[Math.PI / -2, 0, 0]}
-              maxWidth={2.1}
+              maxWidth={2.05}
             >
               In dieser VR-Anwendung kannst du die Kunstwerke von Lucas Cranach
               d. Ä. im digitalen Raum erkunden. Anders als im Museum ermöglicht

@@ -8,7 +8,7 @@ import { calculateImageScale } from "../utils/calculateImageScale"
 const PictureFrame = ({ imgSrc, ...props }) => {
   const imageRef = useRef()
   const [isPointerOver, setIsPointerOver] = useState(false) // Track if ray pointer is over the image
-  const [showMeasurements, setShowMeasurements] = useState(true) // Track visibility of measurements
+  const [showMeasurements, setShowMeasurements] = useState(false) // Track visibility of measurements
   const [previousButtonState, setPreviousButtonState] = useState(false) // Track previous button state
 
   const imageScale = useMemo(() => {
