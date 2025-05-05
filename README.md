@@ -3,7 +3,7 @@
 TODO
 
 - change measurements from button b to a
-- point light from right
+
 - ambient sound
 - chaneg z height of player
 - modal texts longer or view more
@@ -11,6 +11,7 @@ TODO
 
 DONE
 
+- point light from left
 - intro text adjustments
 - Measurements edges, m to cm
 - [FEATURE] display about section/intro: lucas cranach, 100 Meisterwerke

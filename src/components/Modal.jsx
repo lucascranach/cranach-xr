@@ -108,7 +108,7 @@ const Modal = ({ data, ...props }) => {
         textAlign="left" // Explicitly set text alignment
         onSync={onDescriptionSync} // Add the sync callback
       >
-        {trimText(description, 300)} {/* Keep trimming if needed */}
+        {trimText(description, 600)} {/* Keep trimming if needed */}
       </Text>
     </group>
   )

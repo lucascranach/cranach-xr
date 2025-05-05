@@ -51,7 +51,7 @@ export const Experience = (props) => {
     // basePositionY: { value: 1.3, min: -5, max: 5, step: 0.1 }, // Removed
     artworksBaseY: { value: 1.3, min: -5, max: 5, step: 0.1 }, // Base Y for artworks/modals
     modalOffsetX: { value: 0.5, min: 0, max: 2, step: 0.05 }, // Horizontal space between painting edge and modal
-    modalOffsetY: { value: 0.26, min: -0.5, max: 2.5, step: 0.01 }, // Fine-tune vertical offset of modal relative to artwork bottom
+    modalOffsetY: { value: 0.17, min: -0.5, max: 2.5, step: 0.01 }, // Fine-tune vertical offset of modal relative to artwork bottom
     floorLineColor: { value: "#343434" }, // Color picker for the line
     floorLineDepth: { value: 0.05, min: -1, max: 1, step: 0.05 }, // Z position of the line
     dateLineBaseY: { value: 0.01, min: -5, max: 5, step: 0.01 }, // Absolute Y position of the date/line group
@@ -64,7 +64,7 @@ export const Experience = (props) => {
     <>
       {/* Removed outer Flex container */}
       {groupedArtworks.map((group, groupIndex) => {
-        if (groupIndex > 0) return null
+        // if (groupIndex > 0) return null
 
         const groupStartPosition = currentX // Store the start X for this group
 
