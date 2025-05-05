@@ -31,11 +31,6 @@ const store = createXRStore({
   frameRate: "high",
 })
 
-const XRLocomotion = ({ originRef }) => {
-  useXRControllerLocomotion(originRef)
-  return null
-}
-
 const CustomInput = () => {
   const controller = useXRInputSourceState("controller", "right")
   const [isPressed, setIsPressed] = useState(false)
@@ -56,11 +51,16 @@ const CustomInput = () => {
   return null
 }
 
+const XRLocomotion = ({ originRef }) => {
+  useXRControllerLocomotion(originRef, undefined, {
+    type: "smooth",
+    speed: -3,
+  })
+  return <XROrigin ref={originRef} />
+}
+
 const Scene = () => {
   const originRef = useRef(null)
-
-  // const state = useXRInputSourceState("controller", "right")
-  // useFrame(() => state?.object?.getWorldPosition(target))
   return (
     <>
       <button onClick={() => store.enterVR()} className="xr-button">
@@ -69,9 +69,9 @@ const Scene = () => {
       <Suspense fallback={null}>
         <Canvas>
           <XR store={store}>
-            <XROrigin ref={originRef} />
             <XRLocomotion originRef={originRef} />
-            <CustomInput />
+
+            {/* <CustomInput /> */}
             <Leva hidden />
             {/* <ambientLight intensity={1} /> */}
             {/* <mesh rotation={[0, 10, 0]}>
@@ -80,7 +80,7 @@ const Scene = () => {
             </mesh> */}
             <OrbitControls />
             {/* <Grid position={[0, 0.01, 0]} /> */}
-            <group position={[2.4, 0, -1]}>
+            <group position={[4.4, 0, -1]}>
               <Experience originRef={originRef} />
             </group>
           </XR>

@@ -134,7 +134,7 @@ export const Experience = (props) => {
                     position={[
                       width / 2 + modalOffsetX, // X: Relative to painting center -> places left edge next to painting right edge + offset
                       -height / 2 + modalOffsetY, // Y: Relative to painting center -> places bottom edge at painting bottom edge + offset
-                      0.05, // Z: Slightly in front
+                      -0.05, // Z: Slightly in front
                     ]}
                   >
                     <Modal data={data} />
@@ -181,16 +181,13 @@ export const Experience = (props) => {
             position={[groupStartPosition, dateLineBaseY, -0.3]} // Use dateLineBaseY here
           >
             {/* Floor Line - Position relative to the dateLine group */}
-            <Plane
-              args={[groupWidth, 0.02]} // Use the updated groupWidth including modal space
+            <Box
+              args={[groupWidth, 0.02, 0.02]} // Use the updated groupWidth including modal space
               position={[groupWidth / 2, 0, floorLineDepth]} // Center X relative to group start, Y=0 within this group, controlled Z
               rotation={[-Math.PI / 2, 0, 0]} // Rotate to lie flat on XZ plane
             >
-              <meshBasicMaterial
-                color={floorLineColor}
-                side={THREE.DoubleSide}
-              />
-            </Plane>
+              <meshBasicMaterial color={floorLineColor} />
+            </Box>
             {/* Date Text - Position relative to the dateLine group */}
             <Text
               position={[0, dateTextRelativeY, 0]} // Y is relative to the line/group origin, Z=0
@@ -205,7 +202,7 @@ export const Experience = (props) => {
         )
 
         const introGroup = (
-          <group position={[-3, 1.65, -0.3]}>
+          <group position={[-5, 1.65, -0.3]}>
             <Text fontSize={0.3} anchorX="left" anchorY="top" color="white">
               Lucas Cranach
             </Text>
@@ -218,6 +215,24 @@ export const Experience = (props) => {
               fontWeight={200}
             >
               Meisterwerke
+            </Text>
+            <Text
+              fontSize={0.065}
+              anchorX="left"
+              anchorY="top"
+              color="white"
+              fontWeight={100}
+              position={[0, -1.64, 0.1]} // Adjusted Y position for spacing
+              rotation={[Math.PI / -2, 0, 0]}
+              maxWidth={2.1}
+            >
+              In dieser VR-Anwendung kannst du die Kunstwerke von Lucas Cranach
+              d. Ä. im digitalen Raum erkunden. Anders als im Museum ermöglicht
+              dir die virtuelle Realität, auch die Rückseiten der Gemälde mit
+              interessanten Inschriften zu betrachten. Dank moderner
+              VR-Technologie erstrahlen die Werke in ihrer ursprünglichen
+              Farbintensität – ein faszinierender Blick auf die Kunst der
+              Renaissance.
             </Text>
           </group>
         )
