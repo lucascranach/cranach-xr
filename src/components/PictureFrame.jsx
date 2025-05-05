@@ -101,11 +101,39 @@ const PictureFrame = ({ imgSrc, ...props }) => {
             <meshBasicMaterial color="white" transparent opacity={0.5} />
           </Plane>
 
+          <Plane
+            args={[0.01, 0.04]}
+            position={[imageScale[0] / 2 + 0.005, imageScale[1] / 2 + 0.05, 0]}
+          >
+            <meshBasicMaterial color="white" transparent opacity={0.5} />
+          </Plane>
+          <Plane
+            args={[0.01, 0.04]}
+            position={[-imageScale[0] / 2 - 0.005, imageScale[1] / 2 + 0.05, 0]}
+          >
+            <meshBasicMaterial color="white" transparent opacity={0.5} />
+          </Plane>
           {/* Left Plane */}
           <Plane
             args={[0.01, imageScale[1]]} // Width is small, height matches the image
             position={[-imageScale[0] / 2 - 0.05, 0, 0]} // Position to the left of the image
             rotation={[0, 0, 0]} // Rotate to align vertically
+          >
+            <meshBasicMaterial color="white" transparent opacity={0.5} />
+          </Plane>
+          <Plane
+            args={[0.04, 0.01]}
+            position={[-imageScale[0] / 2 - 0.05, imageScale[1] / 2 + 0.005, 0]}
+          >
+            <meshBasicMaterial color="white" transparent opacity={0.5} />
+          </Plane>
+          <Plane
+            args={[0.04, 0.01]}
+            position={[
+              -imageScale[0] / 2 - 0.05,
+              -imageScale[1] / 2 - 0.005,
+              0,
+            ]}
           >
             <meshBasicMaterial color="white" transparent opacity={0.5} />
           </Plane>
