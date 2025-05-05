@@ -19,4 +19,3 @@ DONE
 - [TASK] modal nach hinten am bild ausrichten
 - [FEATURE] timeline add geometry
 - Smooth schwenken
-  CUSTOM

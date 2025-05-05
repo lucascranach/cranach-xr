@@ -30,8 +30,8 @@ import { Experience } from "./Experience"
 
 const store = createXRStore({
   controller: {
-    // left: true,
-    // right: true,
+    left: false,
+    right: true,
     rayPointer: true,
     teleportPointer: true,
   },
