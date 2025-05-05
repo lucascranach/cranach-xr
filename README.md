@@ -2,15 +2,14 @@
 
 TODO
 
-- change measurements from button b to a
-
-- ambient sound
-- chaneg z height of player
-- modal texts longer or view more
-- schnelleres gehen / teleportation
+- change button layout: a button for speed; b for measurements; x for player height
+- change z height of player
 
 DONE
 
+- schnelleres gehen / teleportation
+- ambient sound
+- modal texts longer or view more
 - point light from left
 - intro text adjustments
 - Measurements edges, m to cm

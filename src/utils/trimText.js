@@ -20,3 +20,11 @@ export function trimText(text, limit) {
     return text
   }
 }
+
+export function trimTextBySentence(text, sentenceLimit) {
+  const sentences = text.match(/[^.!?]+[.!?]+/g) || [text] // Split text into sentences
+  if (sentences.length > sentenceLimit) {
+    return sentences.slice(0, sentenceLimit).join(" ") + "..."
+  }
+  return text
+}

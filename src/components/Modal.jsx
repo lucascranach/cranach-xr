@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react"
 import { Text, Plane } from "@react-three/drei"
 import * as THREE from "three"
 
-import { trimText } from "../utils/trimText" // Assuming you still need this
+import { trimText, trimTextBySentence } from "../utils/trimText" // Assuming you still need this
 
 const Modal = ({ data, ...props }) => {
   const title = data?.metadata?.title || "No Title"
@@ -108,7 +108,8 @@ const Modal = ({ data, ...props }) => {
         textAlign="left" // Explicitly set text alignment
         onSync={onDescriptionSync} // Add the sync callback
       >
-        {trimText(description, 600)} {/* Keep trimming if needed */}
+        {/* {trimText(description, 600)}  */}
+        {trimTextBySentence(description, 2)}
       </Text>
     </group>
   )

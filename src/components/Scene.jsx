@@ -1,4 +1,4 @@
-import React, { useRef, useState, Suspense, memo } from "react"
+import React, { useRef, useState, Suspense, useEffect } from "react"
 import * as THREE from "three"
 import {
   XR,
@@ -8,8 +8,9 @@ import {
   useXRInputSourceState,
   DefaultXRController,
   useRayPointer,
+  TeleportTarget,
 } from "@react-three/xr"
-import { Canvas, useFrame, useLoader } from "@react-three/fiber"
+import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber"
 import {
   MapControls,
   Grid,
@@ -22,59 +23,108 @@ import {
   SpotLight,
   Plane,
   useHelper,
+  PositionalAudio,
 } from "@react-three/drei"
 import { useControls, Leva } from "leva"
 import { Experience } from "./Experience"
 
 const store = createXRStore({
-  controller: { left: false, right: true, rayPointer: true },
-  hand: false,
+  controller: {
+    // left: true,
+    // right: true,
+    rayPointer: true,
+    teleportPointer: true,
+  },
+  hand: { teleportPointer: true },
   frameRate: "high",
 })
 
-const CustomInput = () => {
+const XRLocomotion = ({ originRef, position }) => {
   const controller = useXRInputSourceState("controller", "right")
   const [isPressed, setIsPressed] = useState(false)
+  const [speed, setSpeed] = useState(2) // Default speed is 2
 
   useFrame(() => {
     if (controller) {
       const { object } = controller
       if (object) {
-        // console.log(controller.inputSource.gamepad)
-        // console.log(controller.inputSource.gamepad.buttons[5])
-        // 5 = b
-        const target = new THREE.Vector3()
-        object.getWorldPosition(target)
+        const buttonPressed = controller.inputSource.gamepad.buttons[5].pressed
+        if (buttonPressed && !isPressed) {
+          console.log("Button 5 pressed")
+          setSpeed(5) // Increase speed to 4 when button 5 is clicked
+          setIsPressed(true)
+        } else if (!buttonPressed && isPressed) {
+          setSpeed(1) // Reset speed to 2 when button 5 is released
+          setIsPressed(false)
+        }
       }
     }
   })
 
-  return null
+  useXRControllerLocomotion(
+    originRef,
+    {
+      speed: speed,
+    },
+    {
+      type: "smooth",
+      speed: -3,
+    }
+  )
+  return <XROrigin ref={originRef} position={position} />
 }
 
-const XRLocomotion = ({ originRef }) => {
-  useXRControllerLocomotion(originRef, undefined, {
-    type: "smooth",
-    speed: -3,
-  })
-  return <XROrigin ref={originRef} />
+const url = "./sounds/cda-vr-ambient.mp3"
+
+function Sound({ url }) {
+  const sound = useRef()
+  const { camera } = useThree()
+  const [listener] = useState(() => new THREE.AudioListener())
+  const buffer = useLoader(THREE.AudioLoader, url)
+  useEffect(() => {
+    sound.current.setBuffer(buffer)
+    sound.current.setRefDistance(1)
+    sound.current.setLoop(true)
+    sound.current.play()
+    camera.add(listener)
+    return () => camera.remove(listener)
+  }, [])
+  return <positionalAudio ref={sound} args={[listener]} />
 }
 
 const Scene = () => {
-  const lightRef = useRef()
+  const [position, setPosition] = useState(new THREE.Vector3())
+  const [ready, setReady] = useState(false)
+
   const originRef = useRef(null)
+
+  const teleSize = 360
+
+  function handleClick() {
+    setReady(true)
+    store.enterVR()
+  }
 
   return (
     <>
-      <button onClick={() => store.enterVR()} className="xr-button">
+      <button onClick={handleClick} className="xr-button">
         Enter VR
       </button>
       <Suspense fallback={null}>
         <Canvas>
           <XR store={store}>
-            <XRLocomotion originRef={originRef} />
+            {/* <CustomInput originRef={originRef} position={position} /> */}
+            <XRLocomotion originRef={originRef} position={position} />
+            <TeleportTarget onTeleport={setPosition}>
+              <mesh
+                scale={[teleSize, 1, 10]}
+                position={[teleSize / 2 - 4, -0.5, 0]}
+              >
+                <boxGeometry />
+                <meshBasicMaterial color="black" />
+              </mesh>
+            </TeleportTarget>
 
-            {/* <CustomInput /> */}
             <Leva hidden />
             {/* <ambientLight intensity={1} /> */}
             {/* <mesh rotation={[0, 10, 0]}>
@@ -85,6 +135,9 @@ const Scene = () => {
             {/* <Grid position={[0, 0.01, 0]} /> */}
             <group position={[4.4, 0, -1]}>
               <Experience originRef={originRef} />
+              {ready && (
+                <PositionalAudio url={url} loop distance={1} autoplay />
+              )}
             </group>
           </XR>
         </Canvas>
