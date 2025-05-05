@@ -28,3 +28,28 @@ export function trimTextBySentence(text, sentenceLimit) {
   }
   return text
 }
+
+export function trimTextToSentenceEnd(text, charLimit) {
+  if (text.length <= charLimit) {
+    return text // No trimming needed
+  }
+
+  // Trim by character limit first
+  const trimmedText = text.substring(0, charLimit)
+
+  // Find the last sentence-ending punctuation within the limit
+  const sentenceEndMatch = trimmedText.match(/([.!?])(?=[^.!?]*$)/)
+  if (sentenceEndMatch) {
+    const lastSentenceEnd = trimmedText.lastIndexOf(sentenceEndMatch[1])
+    return trimmedText.substring(0, lastSentenceEnd + 1).trim()
+  }
+
+  // If no sentence-ending punctuation, fallback to trimming by words
+  const lastSpaceIndex = trimmedText.lastIndexOf(" ")
+  if (lastSpaceIndex !== -1) {
+    return trimmedText.substring(0, lastSpaceIndex) + "..."
+  }
+
+  // If no spaces, return the raw trimmed text with ellipsis
+  return trimmedText + "..."
+}
