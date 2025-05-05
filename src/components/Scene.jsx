@@ -5,7 +5,9 @@ import {
   createXRStore,
   XROrigin,
   useXRControllerLocomotion,
+  useXRInputSourceState,
   DefaultXRController,
+  useRayPointer,
 } from "@react-three/xr"
 import { Canvas, useFrame, useLoader } from "@react-three/fiber"
 import {
@@ -34,20 +36,41 @@ const XRLocomotion = ({ originRef }) => {
   return null
 }
 
+const CustomInput = () => {
+  const controller = useXRInputSourceState("controller", "right")
+  const [isPressed, setIsPressed] = useState(false)
+
+  useFrame(() => {
+    if (controller) {
+      const { object } = controller
+      if (object) {
+        // console.log(controller.inputSource.gamepad)
+        // console.log(controller.inputSource.gamepad.buttons[5])
+        // 5 = b
+        const target = new THREE.Vector3()
+        object.getWorldPosition(target)
+      }
+    }
+  })
+
+  return null
+}
+
 const Scene = () => {
   const originRef = useRef(null)
 
+  // const state = useXRInputSourceState("controller", "right")
+  // useFrame(() => state?.object?.getWorldPosition(target))
   return (
     <>
       <button onClick={() => store.enterVR()}>Enter VR</button>
-      <button onClick={() => store.enterAR()}>Enter AR</button>
       <Suspense fallback={null}>
         <Canvas>
           <XR store={store}>
             <XROrigin ref={originRef} />
             <XRLocomotion originRef={originRef} />
+            <CustomInput />
             {/* <ambientLight intensity={1} /> */}
-
             {/* <mesh rotation={[0, 10, 0]}>
               <boxGeometry attach="geometry" args={[1, 1, 1]} />
               <meshStandardMaterial attach="material" color={"#6be092"} />

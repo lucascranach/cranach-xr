@@ -139,6 +139,34 @@ export const Experience = (props) => {
                   >
                     <Modal data={data} />
                   </group>
+                  <group
+                    position={[0, 0, 0.05]} // Position slightly behind the artwork
+                    rotation={[0, 0, 0]} // No rotation
+                    visible={false} // Set to false to hide the planes
+                  >
+                    <Plane
+                      args={[0.01, height]} // Width is small, height matches the image
+                      position={[-width / 2 - 0.03, 0, 0]} // Position to the left of the image
+                      rotation={[0, 0, 0]} // Rotate to align vertically
+                    >
+                      <meshBasicMaterial
+                        color="white"
+                        transparent
+                        opacity={0.5}
+                      />
+                    </Plane>
+                    <Plane
+                      args={[width, 0.01]} // Width is small, height matches the image
+                      position={[0, height / 2 + 0.03, 0]} // Position to the left of the image
+                      rotation={[0, 0, 0]} // Rotate to align vertically
+                    >
+                      <meshBasicMaterial
+                        color="white"
+                        transparent
+                        opacity={0.5}
+                      />
+                    </Plane>
+                  </group>
                 </group>
               )
             })}
