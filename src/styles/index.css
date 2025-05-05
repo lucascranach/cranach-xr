@@ -11,4 +11,20 @@ body,
 
   background: #949494;
   background: #000;
+  background: #585858;
+}
+
+.xr-button {
+  background-color: white;
+  border: none;
+  position: absolute;
+  color: black;
+  padding: 1rem 2rem;
+  margin: 1rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+
+  cursor: pointer;
 }

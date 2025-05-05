@@ -63,13 +63,16 @@ const Scene = () => {
   // useFrame(() => state?.object?.getWorldPosition(target))
   return (
     <>
-      <button onClick={() => store.enterVR()}>Enter VR</button>
+      <button onClick={() => store.enterVR()} className="xr-button">
+        Enter VR
+      </button>
       <Suspense fallback={null}>
         <Canvas>
           <XR store={store}>
             <XROrigin ref={originRef} />
             <XRLocomotion originRef={originRef} />
             <CustomInput />
+            <Leva hidden />
             {/* <ambientLight intensity={1} /> */}
             {/* <mesh rotation={[0, 10, 0]}>
               <boxGeometry attach="geometry" args={[1, 1, 1]} />

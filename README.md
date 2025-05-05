@@ -4,14 +4,14 @@ TODO
 
 - intro texte weiß, mengentext
 - modal nach hinten am bild ausrichten
-
 - linie heller
 - timeline
-- [FEATURE] display sizes of paintings via button click
+- change measurements from button b to a
 
 DONE
 
 - [FEATURE] display about section/intro: lucas cranach, 100 Meisterwerke
+- [FEATURE] display sizes of paintings via button click
 
 CUSTOM
 

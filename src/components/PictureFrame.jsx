@@ -50,7 +50,14 @@ const PictureFrame = ({ imgSrc, ...props }) => {
           e.stopPropagation() // Prevent event bubbling
         }}
       />
-
+      {props.data.images.reverse && (
+        <Image
+          position={[0, 0, -0.052]}
+          url={props.data.images.reverse.images[0].sizes.medium.src}
+          scale={imageScale}
+          rotation-y={Math.PI}
+        />
+      )}
       {/* Frame */}
       <Box
         args={[imageScale[0] + frameSize, imageScale[1] + frameSize, 0.05]}
@@ -60,7 +67,6 @@ const PictureFrame = ({ imgSrc, ...props }) => {
         <pointLight position={[-1, 4, 0]} intensity={10} />
         <meshStandardMaterial attach="material" color={"#434343"} />
       </Box>
-
       {/* Measurements */}
       {showMeasurements && (
         <>
