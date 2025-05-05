@@ -64,6 +64,8 @@ export const Experience = (props) => {
     <>
       {/* Removed outer Flex container */}
       {groupedArtworks.map((group, groupIndex) => {
+        if (groupIndex > 0) return null
+
         const groupStartPosition = currentX // Store the start X for this group
 
         // --- Calculate Group Width ---

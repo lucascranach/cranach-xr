@@ -21,6 +21,7 @@ import {
   Text,
   SpotLight,
   Plane,
+  useHelper,
 } from "@react-three/drei"
 import { useControls, Leva } from "leva"
 import { Experience } from "./Experience"
@@ -60,7 +61,9 @@ const XRLocomotion = ({ originRef }) => {
 }
 
 const Scene = () => {
+  const lightRef = useRef()
   const originRef = useRef(null)
+
   return (
     <>
       <button onClick={() => store.enterVR()} className="xr-button">
@@ -89,5 +92,4 @@ const Scene = () => {
     </>
   )
 }
-
 export default Scene

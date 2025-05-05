@@ -6,12 +6,12 @@ TODO
 - point light from right
 - ambient sound
 - chaneg z height of player
-- intro text adjustments
 - modal texts longer or view more
 - schnelleres gehen / teleportation
 
 DONE
 
+- intro text adjustments
 - Measurements edges, m to cm
 - [FEATURE] display about section/intro: lucas cranach, 100 Meisterwerke
 - display sizes of paintings via button click

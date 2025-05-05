@@ -1,12 +1,16 @@
 import React, { useMemo, useRef, useState } from "react"
-import { Image, Box, Text, Plane } from "@react-three/drei"
+import { Image, Box, Text, Plane, useHelper, Helper } from "@react-three/drei"
 import { useFrame } from "@react-three/fiber"
 import { useXRInputSourceState } from "@react-three/xr"
+import * as THREE from "three"
+import { SpotLightHelper } from "three"
 
 import { calculateImageScale } from "../utils/calculateImageScale"
 
 const PictureFrame = ({ imgSrc, ...props }) => {
   const imageRef = useRef()
+  const lightsRef = useRef()
+
   const [isPointerOver, setIsPointerOver] = useState(false) // Track if ray pointer is over the image
   const [showMeasurements, setShowMeasurements] = useState(false) // Track visibility of measurements
   const [previousButtonState, setPreviousButtonState] = useState(false) // Track previous button state
@@ -60,12 +64,12 @@ const PictureFrame = ({ imgSrc, ...props }) => {
         />
       )}
       {/* Frame */}
+      <pointLight position={[-2, 3, 0]} intensity={20} ref={lightsRef} />
       <Box
         args={[imageScale[0] + frameSize, imageScale[1] + frameSize, 0.05]}
         scale={[1, 1, 1]}
         position={[0, 0, -0.026]}
       >
-        <pointLight position={[-1, 4, 0]} intensity={10} />
         <meshStandardMaterial attach="material" color={"#434343"} />
       </Box>
       {/* Measurements */}
