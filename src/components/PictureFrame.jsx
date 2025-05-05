@@ -8,7 +8,7 @@ import { calculateImageScale } from "../utils/calculateImageScale"
 const PictureFrame = ({ imgSrc, ...props }) => {
   const imageRef = useRef()
   const [isPointerOver, setIsPointerOver] = useState(false) // Track if ray pointer is over the image
-  const [showMeasurements, setShowMeasurements] = useState(false) // Track visibility of measurements
+  const [showMeasurements, setShowMeasurements] = useState(true) // Track visibility of measurements
   const [previousButtonState, setPreviousButtonState] = useState(false) // Track previous button state
 
   const imageScale = useMemo(() => {
@@ -16,6 +16,7 @@ const PictureFrame = ({ imgSrc, ...props }) => {
   }, [props.data])
 
   const frameSize = 0.025
+  const measurementOpacity = 0.5
 
   const controller = useXRInputSourceState("controller", "right")
 
@@ -78,7 +79,7 @@ const PictureFrame = ({ imgSrc, ...props }) => {
             anchorX="center"
             anchorY="middle"
           >
-            {imageScale[0].toFixed(2)}m
+            {(imageScale[0] * 100).toFixed(1)} cm
           </Text>
 
           {/* Left Measurement */}
@@ -90,7 +91,7 @@ const PictureFrame = ({ imgSrc, ...props }) => {
             anchorX="center"
             anchorY="middle"
           >
-            {imageScale[1].toFixed(2)}m
+            {(imageScale[1] * 100).toFixed(1)} cm
           </Text>
 
           {/* Top Plane */}
@@ -98,20 +99,32 @@ const PictureFrame = ({ imgSrc, ...props }) => {
             args={[imageScale[0], 0.01]} // Width matches the image, height is small
             position={[0, imageScale[1] / 2 + 0.05, 0]} // Position above the image
           >
-            <meshBasicMaterial color="white" transparent opacity={0.5} />
+            <meshBasicMaterial
+              color="white"
+              transparent
+              opacity={measurementOpacity}
+            />
           </Plane>
 
           <Plane
             args={[0.01, 0.04]}
             position={[imageScale[0] / 2 + 0.005, imageScale[1] / 2 + 0.05, 0]}
           >
-            <meshBasicMaterial color="white" transparent opacity={0.5} />
+            <meshBasicMaterial
+              color="white"
+              transparent
+              opacity={measurementOpacity}
+            />
           </Plane>
           <Plane
             args={[0.01, 0.04]}
             position={[-imageScale[0] / 2 - 0.005, imageScale[1] / 2 + 0.05, 0]}
           >
-            <meshBasicMaterial color="white" transparent opacity={0.5} />
+            <meshBasicMaterial
+              color="white"
+              transparent
+              opacity={measurementOpacity}
+            />
           </Plane>
           {/* Left Plane */}
           <Plane
@@ -119,13 +132,21 @@ const PictureFrame = ({ imgSrc, ...props }) => {
             position={[-imageScale[0] / 2 - 0.05, 0, 0]} // Position to the left of the image
             rotation={[0, 0, 0]} // Rotate to align vertically
           >
-            <meshBasicMaterial color="white" transparent opacity={0.5} />
+            <meshBasicMaterial
+              color="white"
+              transparent
+              opacity={measurementOpacity}
+            />
           </Plane>
           <Plane
             args={[0.04, 0.01]}
             position={[-imageScale[0] / 2 - 0.05, imageScale[1] / 2 + 0.005, 0]}
           >
-            <meshBasicMaterial color="white" transparent opacity={0.5} />
+            <meshBasicMaterial
+              color="white"
+              transparent
+              opacity={measurementOpacity}
+            />
           </Plane>
           <Plane
             args={[0.04, 0.01]}
@@ -135,7 +156,11 @@ const PictureFrame = ({ imgSrc, ...props }) => {
               0,
             ]}
           >
-            <meshBasicMaterial color="white" transparent opacity={0.5} />
+            <meshBasicMaterial
+              color="white"
+              transparent
+              opacity={measurementOpacity}
+            />
           </Plane>
         </>
       )}
