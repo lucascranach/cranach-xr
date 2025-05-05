@@ -50,7 +50,7 @@ const XRLocomotion = ({ originRef, position }) => {
       if (object) {
         const buttonPressed = controller.inputSource.gamepad.buttons[5].pressed
         if (buttonPressed && !isPressed) {
-          console.log("Button 5 pressed")
+          // console.log("Button 5 pressed")
           setSpeed(5) // Increase speed to 4 when button 5 is clicked
           setIsPressed(true)
         } else if (!buttonPressed && isPressed) {

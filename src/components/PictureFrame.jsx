@@ -45,12 +45,12 @@ const PictureFrame = ({ imgSrc, ...props }) => {
         scale={imageScale}
         url={props.data.images.overall.images[0].sizes.medium.src}
         onPointerOver={(e) => {
-          console.log("Ray pointer is on the image")
+          // console.log("Ray pointer is on the image")
           setIsPointerOver(true) // Set pointer over state to true
           e.stopPropagation() // Prevent event bubbling
         }}
         onPointerOut={(e) => {
-          console.log("Ray pointer left the image")
+          // console.log("Ray pointer left the image")
           setIsPointerOver(false) // Set pointer over state to false
           e.stopPropagation() // Prevent event bubbling
         }}
