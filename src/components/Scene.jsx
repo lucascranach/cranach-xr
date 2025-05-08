@@ -34,7 +34,7 @@ import { Experience } from "./Experience"
 const store = createXRStore({
   controller: {
     left: false,
-    right: true,
+    // right: true,
     rayPointer: true,
     teleportPointer: true,
   },
@@ -53,7 +53,7 @@ const XRLocomotion = ({ originRef, position }) => {
       if (object) {
         const buttonPressed = controller.inputSource.gamepad.buttons[5].pressed
         if (buttonPressed && !isPressed) {
-          // console.log("Button 5 pressed")
+          console.log("Button 5 pressed")
           setSpeed(5) // Increase speed to 4 when button 5 is clicked
           setIsPressed(true)
         } else if (!buttonPressed && isPressed) {
@@ -111,7 +111,7 @@ const Scene = () => {
       <Suspense fallback={null}>
         <Canvas>
           <XR store={store}>
-            <group position={[0, 1.6, -0.5]}>
+            {/* <group position={[0, 1.6, -0.5]} >
               <XRLayer
                 src={img2}
                 pixelWidth={0.45799999999999996}
@@ -124,7 +124,7 @@ const Scene = () => {
                 url={imgsrc}
                 position={[-0.5, 0, 0]}
               />
-            </group>
+            </group> */}
 
             <XRLocomotion originRef={originRef} position={position} />
             <TeleportTarget onTeleport={setPosition}>
@@ -144,9 +144,9 @@ const Scene = () => {
             {/* <Grid position={[0, 0.01, 0]} /> */}
             <group position={[4.4, 0, -1]}>
               <Experience originRef={originRef} />
-              {ready && (
+              {/* {ready && (
                 <PositionalAudio url={url} loop distance={1} autoplay />
-              )}
+              )} */}
             </group>
           </XR>
         </Canvas>

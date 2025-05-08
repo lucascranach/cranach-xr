@@ -48,7 +48,7 @@ const PictureFrame = ({ imgSrc, ...props }) => {
   return (
     <group>
       {/* Main Image */}
-      <XRLayer
+      {/* <XRLayer
         src={imgSrcFront}
         pixelWidth={imageScale[0]}
         pixelHeight={imageScale[1]}
@@ -65,13 +65,14 @@ const PictureFrame = ({ imgSrc, ...props }) => {
           setIsPointerOver(false) // Set pointer over state to false
           e.stopPropagation() // Prevent event bubbling
         }}
-      />
-      scale={imageScale}
-      {/* <Image
+      /> */}
+
+      <Image
         url={props.data.images.overall.images[0].sizes.medium.src}
         // onClick={() =>
         //   console.log(props.data.images.overall.images[0].sizes.medium.src)
         // }
+        scale={imageScale}
         onPointerOver={(e) => {
           // console.log("Ray pointer is on the image")
           setIsPointerOver(true) // Set pointer over state to true
@@ -82,7 +83,7 @@ const PictureFrame = ({ imgSrc, ...props }) => {
           setIsPointerOver(false) // Set pointer over state to false
           e.stopPropagation() // Prevent event bubbling
         }}
-      /> */}
+      />
       {props.data.images.reverse && (
         <Image
           position={[0, 0, -0.052]}
