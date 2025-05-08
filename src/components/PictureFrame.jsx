@@ -44,6 +44,9 @@ const PictureFrame = ({ imgSrc, ...props }) => {
       <Image
         scale={imageScale}
         url={props.data.images.overall.images[0].sizes.medium.src}
+        // onClick={() =>
+        //   console.log(props.data.images.overall.images[0].sizes.medium.src)
+        // }
         onPointerOver={(e) => {
           // console.log("Ray pointer is on the image")
           setIsPointerOver(true) // Set pointer over state to true

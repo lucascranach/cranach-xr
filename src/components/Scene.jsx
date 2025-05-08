@@ -1,4 +1,4 @@
-import React, { useRef, useState, Suspense, useEffect } from "react"
+import React, { useRef, useState, Suspense, useEffect, useMemo } from "react"
 import * as THREE from "three"
 import {
   XR,
@@ -9,6 +9,7 @@ import {
   DefaultXRController,
   useRayPointer,
   TeleportTarget,
+  XRLayer,
 } from "@react-three/xr"
 import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber"
 import {
@@ -19,11 +20,13 @@ import {
   Center,
   OrbitControls,
   Box,
+  Image,
   Text,
   SpotLight,
   Plane,
   useHelper,
   PositionalAudio,
+  useTexture,
 } from "@react-three/drei"
 import { useControls, Leva } from "leva"
 import { Experience } from "./Experience"
@@ -74,36 +77,31 @@ const XRLocomotion = ({ originRef, position }) => {
   return <XROrigin ref={originRef} position={position} />
 }
 
-const url = "./sounds/cda-vr-ambient.mp3"
-
-function Sound({ url }) {
-  const sound = useRef()
-  const { camera } = useThree()
-  const [listener] = useState(() => new THREE.AudioListener())
-  const buffer = useLoader(THREE.AudioLoader, url)
-  useEffect(() => {
-    sound.current.setBuffer(buffer)
-    sound.current.setRefDistance(1)
-    sound.current.setLoop(true)
-    sound.current.play()
-    camera.add(listener)
-    return () => camera.remove(listener)
-  }, [])
-  return <positionalAudio ref={sound} args={[listener]} />
-}
-
 const Scene = () => {
   const [position, setPosition] = useState(new THREE.Vector3())
   const [ready, setReady] = useState(false)
 
   const originRef = useRef(null)
 
+  const url = "./sounds/cda-vr-ambient.mp3"
   const teleSize = 360
 
   function handleClick() {
     setReady(true)
     store.enterVR()
   }
+
+  const imgsrc =
+    "https://lucascranach.org/imageserver-2022/AT_KHM_GG6905_FR001/01_Overall/AT_KHM_GG6905_FR001_2008-08_Overall-m.jpg"
+
+  // const imgsrc = "./img/demo-m.jpg"
+
+  const img2 = useMemo(() => {
+    const result = document.createElement("img")
+    result.crossOrigin = "anonymous" // Allow cross-origin requests
+    result.src = imgsrc
+    return result
+  }, [])
 
   return (
     <>
@@ -113,7 +111,21 @@ const Scene = () => {
       <Suspense fallback={null}>
         <Canvas>
           <XR store={store}>
-            {/* <CustomInput originRef={originRef} position={position} /> */}
+            <group position={[0, 1.6, -0.5]}>
+              <XRLayer
+                src={img2}
+                pixelWidth={0.45799999999999996}
+                pixelHeight={0.584}
+                scale={[0.45799999999999996, 0.584, 1]}
+                dpr={32}
+              />
+              <Image
+                scale={[0.45799999999999996, 0.584, 1]}
+                url={imgsrc}
+                position={[-0.5, 0, 0]}
+              />
+            </group>
+
             <XRLocomotion originRef={originRef} position={position} />
             <TeleportTarget onTeleport={setPosition}>
               <mesh
@@ -127,10 +139,7 @@ const Scene = () => {
 
             <Leva hidden />
             {/* <ambientLight intensity={1} /> */}
-            {/* <mesh rotation={[0, 10, 0]}>
-              <boxGeometry attach="geometry" args={[1, 1, 1]} />
-              <meshStandardMaterial attach="material" color={"#6be092"} />
-            </mesh> */}
+
             <OrbitControls />
             {/* <Grid position={[0, 0.01, 0]} /> */}
             <group position={[4.4, 0, -1]}>
@@ -145,4 +154,5 @@ const Scene = () => {
     </>
   )
 }
+
 export default Scene
