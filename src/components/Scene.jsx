@@ -36,7 +36,7 @@ const store = createXRStore({
     left: false,
     // right: true,
     rayPointer: true,
-    teleportPointer: true,
+    // teleportPointer: true,
   },
   hand: { teleportPointer: true },
   frameRate: "high",

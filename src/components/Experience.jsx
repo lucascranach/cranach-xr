@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+import React, { useMemo, useState, useRef } from "react"
 import { useAtomValue } from "jotai"
 import { Box, Text, Plane } from "@react-three/drei"
 import * as THREE from "three"
@@ -22,6 +22,7 @@ const Artwork = ({
   artworkPositionY,
   modalOffsetX,
   modalOffsetY,
+  originRef,
 }) => {
   const [width, height] = calculateImageScale(data)
 
@@ -29,7 +30,12 @@ const Artwork = ({
     <group position={[artworkPositionX, artworkPositionY, 0]}>
       <Draggable>
         <group>
-          <PictureFrame key={data.id} data={data} index={index} />
+          <PictureFrame
+            key={data.id}
+            data={data}
+            index={index}
+            originRef={originRef}
+          />
         </group>
       </Draggable>
       <group
@@ -70,6 +76,7 @@ const ArtworkGroup = ({
   artworkSpacing,
   modalOffsetX,
   modalOffsetY,
+  originRef,
 }) => {
   let artworkOffsetX = 0
 
@@ -93,6 +100,7 @@ const ArtworkGroup = ({
             artworkPositionY={artworkPositionY}
             modalOffsetX={modalOffsetX}
             modalOffsetY={modalOffsetY}
+            originRef={originRef}
           />
         )
       })}
@@ -201,7 +209,7 @@ export const Experience = (props) => {
   return (
     <>
       {groupedArtworks.map((group, groupIndex) => {
-        if (groupIndex > 1) return null
+        // if (groupIndex > 1) return null
 
         const groupStartPosition = currentX
         const groupWidth = Math.max(
@@ -230,6 +238,7 @@ export const Experience = (props) => {
               artworkSpacing={artworkSpacing}
               modalOffsetX={modalOffsetX}
               modalOffsetY={modalOffsetY}
+              originRef={props.originRef}
             />
             <DateLineGroup
               group={group}
