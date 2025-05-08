@@ -201,7 +201,7 @@ export const Experience = (props) => {
   return (
     <>
       {groupedArtworks.map((group, groupIndex) => {
-        // if (groupIndex > 4) return null
+        if (groupIndex > 1) return null
 
         const groupStartPosition = currentX
         const groupWidth = Math.max(

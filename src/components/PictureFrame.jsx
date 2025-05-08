@@ -26,15 +26,14 @@ const PictureFrame = ({ imgSrc, ...props }) => {
 
   useFrame(() => {
     if (controller && controller.inputSource.gamepad) {
-      const isButtonPressed = controller.inputSource.gamepad.buttons[5].pressed
-
+      const buttonBPressed = controller.inputSource.gamepad.buttons[5].pressed
       // Show measurements only if the pointer is over the image and the button is pressed
-      if (isPointerOver && isButtonPressed && !previousButtonState) {
+      if (isPointerOver && buttonBPressed && !previousButtonState) {
         setShowMeasurements((prev) => !prev) // Toggle visibility
       }
 
       // Update the previous button state
-      setPreviousButtonState(isButtonPressed)
+      setPreviousButtonState(buttonBPressed)
     }
   })
 

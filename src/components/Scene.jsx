@@ -44,21 +44,34 @@ const store = createXRStore({
 
 const XRLocomotion = ({ originRef, position }) => {
   const controller = useXRInputSourceState("controller", "right")
-  const [isPressed, setIsPressed] = useState(false)
   const [speed, setSpeed] = useState(2) // Default speed is 2
+  const [yHeight, setYHeight] = useState(0) // Default Z height adjustment
 
   useFrame(() => {
     if (controller) {
       const { object } = controller
       if (object) {
-        const buttonPressed = controller.inputSource.gamepad.buttons[5].pressed
-        if (buttonPressed && !isPressed) {
+        // rb: 1
+        // a: 4
+        // b: 5
+        const buttonRBPressed =
+          controller.inputSource.gamepad.buttons[1].pressed
+        const buttonAPressed = controller.inputSource.gamepad.buttons[4].pressed
+
+        if (buttonAPressed) {
           console.log("Button 5 pressed")
           setSpeed(5) // Increase speed to 4 when button 5 is clicked
-          setIsPressed(true)
-        } else if (!buttonPressed && isPressed) {
+        } else if (!buttonAPressed) {
           setSpeed(1) // Reset speed to 2 when button 5 is released
-          setIsPressed(false)
+        }
+
+        if (buttonRBPressed) {
+          setYHeight(2)
+        } else if (!buttonRBPressed) {
+          setYHeight(0)
+        }
+        if (originRef.current) {
+          originRef.current.position.y = yHeight
         }
       }
     }
