@@ -28,10 +28,12 @@ import {
   useHelper,
   PositionalAudio,
   useTexture,
+  Svg,
 } from "@react-three/drei"
 import { useControls, Leva } from "leva"
 import { Experience } from "./Experience"
 import { readyAtom } from "../store/atom"
+import Draggable from "./Draggable"
 
 const store = createXRStore({
   controller: {
@@ -105,6 +107,13 @@ const Scene = () => {
     store.enterVR()
   }
 
+  const controlsSrc = useMemo(() => {
+    const result = document.createElement("img")
+    result.crossOrigin = "anonymous" // Allow cross-origin requests
+    result.src = "./controls.png"
+    return result
+  }, [])
+
   return (
     <>
       <button onClick={handleClick} className="xr-button">
@@ -114,6 +123,19 @@ const Scene = () => {
         <Canvas>
           <XR store={store}>
             <XRLocomotion originRef={originRef} position={position} />
+
+            <group position={[-0.25, 1.0, -1.3]} scale={0.1}>
+              <XRLayer
+                src={controlsSrc}
+                pixelWidth={2060}
+                pixelHeight={1236}
+                scale={[(2060 / 1000) * 4, (1236 / 1000) * 4, 1]}
+                dpr={32}
+                shape="quad"
+                quality="graphics-optimized"
+              />
+            </group>
+
             {/* <TeleportTarget onTeleport={setPosition}>
               <mesh
                 scale={[teleSize, 1, 10]}

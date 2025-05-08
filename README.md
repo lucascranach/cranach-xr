@@ -4,7 +4,9 @@ TODO
 
 - show controls infographic
 - xrlayer overlapping update npm package when ready
-- resort data based on date
+- resort data based on date?
+- spot light not affected by dragging
+- new controls -> x toggle sound, y reset positions
 
 DONE
 
