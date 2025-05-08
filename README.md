@@ -4,6 +4,7 @@ TODO
 
 - show controls infographic
 - xrlayer overlapping update npm package when ready
+- resort data based on date
 
 DONE
 
