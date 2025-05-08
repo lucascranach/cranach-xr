@@ -1,4 +1,5 @@
 import React, { useRef, useState, Suspense, useEffect, useMemo } from "react"
+import { useAtom } from "jotai"
 import * as THREE from "three"
 import {
   XR,
@@ -30,6 +31,7 @@ import {
 } from "@react-three/drei"
 import { useControls, Leva } from "leva"
 import { Experience } from "./Experience"
+import { readyAtom } from "../store/atom"
 
 const store = createXRStore({
   controller: {
@@ -92,29 +94,16 @@ const XRLocomotion = ({ originRef, position }) => {
 
 const Scene = () => {
   const [position, setPosition] = useState(new THREE.Vector3())
-  const [ready, setReady] = useState(false)
+  const [ready, setReady] = useAtom(readyAtom)
 
   const originRef = useRef(null)
 
-  const url = "./sounds/cda-vr-ambient.mp3"
   const teleSize = 360
 
   function handleClick() {
     setReady(true)
     store.enterVR()
   }
-
-  const imgsrc =
-    "https://lucascranach.org/imageserver-2022/AT_KHM_GG6905_FR001/01_Overall/AT_KHM_GG6905_FR001_2008-08_Overall-m.jpg"
-
-  // const imgsrc = "./img/demo-m.jpg"
-
-  const img2 = useMemo(() => {
-    const result = document.createElement("img")
-    result.crossOrigin = "anonymous" // Allow cross-origin requests
-    result.src = imgsrc
-    return result
-  }, [])
 
   return (
     <>
@@ -124,23 +113,8 @@ const Scene = () => {
       <Suspense fallback={null}>
         <Canvas>
           <XR store={store}>
-            {/* <group position={[0, 1.6, -0.5]} >
-              <XRLayer
-                src={img2}
-                pixelWidth={0.45799999999999996}
-                pixelHeight={0.584}
-                scale={[0.45799999999999996, 0.584, 1]}
-                dpr={32}
-              />
-              <Image
-                scale={[0.45799999999999996, 0.584, 1]}
-                url={imgsrc}
-                position={[-0.5, 0, 0]}
-              />
-            </group> */}
-
             <XRLocomotion originRef={originRef} position={position} />
-            <TeleportTarget onTeleport={setPosition}>
+            {/* <TeleportTarget onTeleport={setPosition}>
               <mesh
                 scale={[teleSize, 1, 10]}
                 position={[teleSize / 2 - 4, -0.5, 0]}
@@ -148,18 +122,17 @@ const Scene = () => {
                 <boxGeometry />
                 <meshBasicMaterial color="black" />
               </mesh>
-            </TeleportTarget>
+            </TeleportTarget> */}
 
             <Leva hidden />
             {/* <ambientLight intensity={1} /> */}
 
             <OrbitControls />
             {/* <Grid position={[0, 0.01, 0]} /> */}
+
+            {ready && <MovingBox originRef={originRef} />}
             <group position={[4.4, 0, -1]}>
               <Experience originRef={originRef} />
-              {/* {ready && (
-                <PositionalAudio url={url} loop distance={1} autoplay />
-              )} */}
             </group>
           </XR>
         </Canvas>
@@ -169,3 +142,26 @@ const Scene = () => {
 }
 
 export default Scene
+
+const MovingBox = ({ originRef }) => {
+  const url = "./sounds/cda-vr-ambient.mp3"
+  const boxRef = useRef(null)
+
+  useFrame(() => {
+    if (originRef.current && boxRef.current) {
+      const playerPosition = new THREE.Vector3()
+      originRef.current.getWorldPosition(playerPosition)
+
+      boxRef.current.position.x = playerPosition.x // Sync box's x position with player's x position
+    }
+  })
+
+  return (
+    <group ref={boxRef} position={[0, 0, -1]}>
+      <PositionalAudio url={url} loop distance={2} autoplay />
+      {/* <Box args={[1, 1, 1]}>
+        <meshBasicMaterial color={"red"} transparent opacity={0.5} />
+      </Box> */}
+    </group>
+  )
+}

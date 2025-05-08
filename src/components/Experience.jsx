@@ -1,10 +1,10 @@
 import React, { useMemo, useState, useRef } from "react"
 import { useAtomValue } from "jotai"
-import { Box, Text, Plane } from "@react-three/drei"
+import { Box, Text, Plane, PositionalAudio } from "@react-three/drei"
 import * as THREE from "three"
 import { useControls } from "leva"
 
-import { artworksAtom } from "../store/atom"
+import { artworksAtom, readyAtom } from "../store/atom"
 import PictureFrame from "./PictureFrame"
 import Modal from "./Modal"
 import Draggable from "./Draggable"
@@ -78,6 +78,7 @@ const ArtworkGroup = ({
   modalOffsetY,
   originRef,
 }) => {
+  const ready = useAtomValue(readyAtom)
   let artworkOffsetX = 0
 
   return (

@@ -58,7 +58,7 @@ const PictureFrame = ({ imgSrc, originRef, ...props }) => {
       let newRes = ""
       if (distance > 30) {
         newRes = "low"
-      } else if (distance > 10 && distance <= 30) {
+      } else if (distance > 16 && distance <= 30) {
         newRes = "middle"
       } else {
         newRes = "high"
@@ -178,7 +178,7 @@ const PictureFrame = ({ imgSrc, originRef, ...props }) => {
         position={[0, 0, -0.026]}
       >
         <meshStandardMaterial attach="material" color={"#434343"} />
-        {imgRes === "high" && (
+        {/* {imgRes === "high" && (
           <meshStandardMaterial attach="material" color={"blue"} />
         )}
         {imgRes === "middle" && (
@@ -186,7 +186,7 @@ const PictureFrame = ({ imgSrc, originRef, ...props }) => {
         )}
         {imgRes === "low" && (
           <meshStandardMaterial attach="material" color={"yellow"} />
-        )}
+        )} */}
       </Box>
       {/* Measurements */}
       {showMeasurements && (

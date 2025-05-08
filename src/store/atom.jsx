@@ -6,4 +6,4 @@ export const artworksAtom = atom(async () => {
   return data
 })
 
-export const currentModalAtom = atom({})
+export const readyAtom = atom(false)
