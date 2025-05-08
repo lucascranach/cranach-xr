@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState } from "react"
 import { Image, Box, Text, Plane, useHelper, Helper } from "@react-three/drei"
 import { useFrame } from "@react-three/fiber"
-import { useXRInputSourceState } from "@react-three/xr"
+import { useXRInputSourceState, XRLayer } from "@react-three/xr"
 import * as THREE from "three"
 import { SpotLightHelper } from "three"
 
@@ -38,11 +38,36 @@ const PictureFrame = ({ imgSrc, ...props }) => {
     }
   })
 
+  const imgSrcFront = useMemo(() => {
+    const result = document.createElement("img")
+    result.crossOrigin = "anonymous" // Allow cross-origin requests
+    result.src = props.data.images.overall.images[0].sizes.medium.src
+    return result
+  }, [])
+
   return (
     <group>
       {/* Main Image */}
-      <Image
-        scale={imageScale}
+      <XRLayer
+        src={imgSrcFront}
+        pixelWidth={imageScale[0]}
+        pixelHeight={imageScale[1]}
+        scale={[imageScale[0], imageScale[1], 1]}
+        dpr={32}
+        shape="quad"
+        onPointerOver={(e) => {
+          // console.log("Ray pointer is on the image")
+          setIsPointerOver(true) // Set pointer over state to true
+          e.stopPropagation() // Prevent event bubbling
+        }}
+        onPointerOut={(e) => {
+          // console.log("Ray pointer left the image")
+          setIsPointerOver(false) // Set pointer over state to false
+          e.stopPropagation() // Prevent event bubbling
+        }}
+      />
+      scale={imageScale}
+      {/* <Image
         url={props.data.images.overall.images[0].sizes.medium.src}
         // onClick={() =>
         //   console.log(props.data.images.overall.images[0].sizes.medium.src)
@@ -57,7 +82,7 @@ const PictureFrame = ({ imgSrc, ...props }) => {
           setIsPointerOver(false) // Set pointer over state to false
           e.stopPropagation() // Prevent event bubbling
         }}
-      />
+      /> */}
       {props.data.images.reverse && (
         <Image
           position={[0, 0, -0.052]}

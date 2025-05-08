@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useAtomValue } from "jotai"
 import { Image, Box, Html, Text3D, Text, Plane } from "@react-three/drei" // Make sure Plane is imported
-import { useFrame } from "@react-three/fiber"
+import { useFrame, useThree } from "@react-three/fiber"
 import * as THREE from "three"
 import { useControls } from "leva" // Import useControls
 // Removed uikit imports
@@ -28,6 +28,7 @@ const MODAL_FIXED_WIDTH = 1 // Based on maxWidth in Modal.jsx
 
 export const Experience = (props) => {
   const artworksData = useAtomValue(artworksAtom)
+
   const groupedArtworks = useMemo(
     () => sortAndGroupArtworks(artworksData),
     [artworksData]
@@ -64,7 +65,7 @@ export const Experience = (props) => {
     <>
       {/* Removed outer Flex container */}
       {groupedArtworks.map((group, groupIndex) => {
-        if (groupIndex > 0) return null
+        if (groupIndex > 4) return null
 
         const groupStartPosition = currentX // Store the start X for this group
 
@@ -115,7 +116,11 @@ export const Experience = (props) => {
 
               // Update offset for the next artwork.
               artworkOffsetX += width + artworkSpacing
-
+              const boxPosition = new THREE.Vector3(
+                groupStartPosition + artworkPositionX,
+                artworksBaseY + artworkPositionY,
+                0
+              )
               return (
                 // This group holds both the Draggable PictureFrame and the Modal
                 // Position is relative to the date group's origin (artworksBaseY)
@@ -129,7 +134,6 @@ export const Experience = (props) => {
                       <PictureFrame key={data.id} data={data} index={index} />
                     </group>
                   </Draggable>
-
                   {/* Position Modal group relative to the PictureFrame group */}
                   {/* Modal origin is its bottom-left */}
                   <group
