@@ -2,14 +2,15 @@
 
 TODO
 
+- show controls infographic
+- xrlayer overlapping update npm package when ready
+
+DONE
+
 - change button layout: a button for speed; b for measurements; x for player height
 - change z height of player
 - lazy loading of images with position saved
 - check if layer can replace image https://pmndrs.github.io/xr/docs/tutorials/layers
-- unique key for mapping
-
-DONE
-
 - schnelleres gehen / teleportation
 - ambient sound
 - modal texts longer or view more
