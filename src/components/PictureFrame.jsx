@@ -81,7 +81,13 @@ const PictureFrame = ({ imgSrc, originRef, ...props }) => {
   }, [])
 
   return (
-    <group>
+    <group
+      onClick={(e) => {
+        // console.log("Clicked on the image")
+        console.log(props.data.images.overall.images[0].sizes.medium.src)
+        console.log(props.data.images.overall.images[0].sizes)
+      }}
+    >
       {imgRes === "high" && (
         <XRLayer
           src={imgSrcFront}
@@ -105,7 +111,7 @@ const PictureFrame = ({ imgSrc, originRef, ...props }) => {
       )}
       {imgRes === "middle" && (
         <Image
-          url={props.data.images.overall.images[0].sizes.medium.src}
+          url={props.data.images.overall.images[0].sizes.small.src}
           // onClick={() =>
           //   console.log(props.data.images.overall.images[0].sizes.medium.src)
           // }
@@ -124,7 +130,7 @@ const PictureFrame = ({ imgSrc, originRef, ...props }) => {
       )}
       {imgRes === "low" && (
         <Image
-          url={props.data.images.overall.images[0].sizes.small.src}
+          url={props.data.images.overall.images[0].sizes.xsmall.src}
           // onClick={() =>
           //   console.log(props.data.images.overall.images[0].sizes.medium.src)
           // }
@@ -141,25 +147,6 @@ const PictureFrame = ({ imgSrc, originRef, ...props }) => {
           }}
         />
       )}
-
-      {/* <XRLayer
-        src={imgSrcFront}
-        pixelWidth={imageScale[0]}
-        pixelHeight={imageScale[1]}
-        scale={[imageScale[0], imageScale[1], 1]}
-        dpr={32}
-        shape="quad"
-        onPointerOver={(e) => {
-          // console.log("Ray pointer is on the image")
-          setIsPointerOver(true) // Set pointer over state to true
-          e.stopPropagation() // Prevent event bubbling
-        }}
-        onPointerOut={(e) => {
-          // console.log("Ray pointer left the image")
-          setIsPointerOver(false) // Set pointer over state to false
-          e.stopPropagation() // Prevent event bubbling
-        }}
-      /> */}
 
       {props.data.images.reverse && (
         <Image
