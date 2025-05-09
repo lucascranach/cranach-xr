@@ -166,7 +166,7 @@ const Scene = () => {
 export default Scene
 
 const MovingBox = ({ originRef }) => {
-  const url = "./sounds/cda-vr-ambient.mp3"
+  const url = "./sounds/cda-vr-ambient-02.mp3"
   const boxRef = useRef(null)
 
   useFrame(() => {
@@ -181,9 +181,9 @@ const MovingBox = ({ originRef }) => {
   return (
     <group ref={boxRef} position={[0, 0, -1]}>
       <PositionalAudio url={url} loop distance={2} autoplay />
-      {/* <Box args={[1, 1, 1]}>
+      <Box args={[1, 1, 1]}>
         <meshBasicMaterial color={"red"} transparent opacity={0.5} />
-      </Box> */}
+      </Box>
     </group>
   )
 }

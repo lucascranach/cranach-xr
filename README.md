@@ -7,6 +7,7 @@ TODO
 - resort data based on date?
 - spot light not affected by dragging
 - new controls -> x toggle sound, y reset positions
+- smooth change height
 
 DONE
 
